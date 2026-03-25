@@ -1,0 +1,51 @@
+#!/bin/sh
+
+echo "🔍 Validating plugin structure..."
+
+# Check all plugins have valid plugin.json
+for plugin_dir in plugins/*/; do
+  plugin_name=$(basename "$plugin_dir")
+  manifest="$plugin_dir.claude-plugin/plugin.json"
+  
+  if [ ! -f "$manifest" ]; then
+    echo "❌ Missing plugin.json: $manifest"
+    exit 1
+  fi
+  
+  # Validate JSON
+  if ! python3 -c "import json; json.load(open('$manifest'))" 2>/dev/null; then
+    echo "❌ Invalid JSON: $manifest"
+    exit 1
+  fi
+  
+  # Check name field exists
+  name=$(python3 -c "import json; print(json.load(open('$manifest')).get('name',''))")
+  if [ -z "$name" ]; then
+    echo "❌ Missing name in $manifest"
+    exit 1
+  fi
+  
+  # Check all skills have SKILL.md at root level (no nesting)
+  if [ -d "$plugin_dir/skills" ]; then
+    for skill_dir in "$plugin_dir/skills"/*/; do
+      if [ ! -f "$skill_dir/SKILL.md" ]; then
+        echo "❌ Missing SKILL.md: $skill_dir"
+        exit 1
+      fi
+    done
+  fi
+  
+  echo "  ✓ $plugin_name ($name v$(python3 -c "import json; print(json.load(open('$manifest')).get('version','?'))"))"
+done
+
+# Validate marketplace.json
+marketplace=".claude-plugin/marketplace.json"
+if [ -f "$marketplace" ]; then
+  if ! python3 -c "import json; json.load(open('$marketplace'))" 2>/dev/null; then
+    echo "❌ Invalid JSON: $marketplace"
+    exit 1
+  fi
+  echo "  ✓ marketplace.json valid"
+fi
+
+echo "✅ All plugins valid"
