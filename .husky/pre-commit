@@ -63,11 +63,21 @@ if [ -d ".claude/skills" ]; then
 fi
 
 # === Drift detection: plugins/pm/skills/ vs .claude/skills/ ===
-if [ -d "plugins/pm/skills" ] && [ -d ".claude/skills" ]; then
-  drift_found=false
-  # Check that every skill in plugins/pm/ has a corresponding source
-  # (Not a full content diff — just existence check for now)
-  echo "  ✓ Drift check: skipped (manual sync)"
+if [ -f "scripts/check-drift.sh" ]; then
+  sh scripts/check-drift.sh
+  if [ $? -ne 0 ]; then
+    echo "❌ Drift detected between .claude/ and plugins/pm/"
+    exit 1
+  fi
+fi
+
+# === Changeset enforcement ===
+if [ -f "scripts/check-changeset.sh" ]; then
+  sh scripts/check-changeset.sh
+  if [ $? -ne 0 ]; then
+    echo "❌ Missing changeset for release-relevant changes"
+    exit 1
+  fi
 fi
 
 echo "✅ All checks passed"
