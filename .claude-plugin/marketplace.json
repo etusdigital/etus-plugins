@@ -1,0 +1,15 @@
+{
+  "name": "etus",
+  "owner": {
+    "name": "Etus Digital",
+    "url": "https://github.com/etusdigital"
+  },
+  "plugins": [
+    {
+      "name": "pm",
+      "source": "./plugins/pm",
+      "description": "Product documentation — story-based elicitation, semantic coverage, developer handoff.",
+      "homepage": "https://github.com/etusdigital/etus-plugins/tree/main/plugins/pm"
+    }
+  ]
+}

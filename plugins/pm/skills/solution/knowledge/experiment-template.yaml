@@ -1,0 +1,9 @@
+experiments:
+  - id: EXP-1
+    solution_ref: SOL-1
+    hypothesis: ""
+    method: ""
+    success_criteria: ""
+    owner: ""
+    duration: ""
+    status: proposed

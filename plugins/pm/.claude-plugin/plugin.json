@@ -1,0 +1,10 @@
+{
+  "name": "pm",
+  "version": "0.1.0",
+  "description": "Product documentation framework with story-based elicitation, semantic coverage, 9 agents, 48 skills, and developer handoff — based on Double Diamond, BMAD, and Superpowers methodologies.",
+  "author": {"name": "Etus Digital", "url": "https://github.com/etusdigital"},
+  "license": "MIT",
+  "homepage": "https://github.com/etusdigital/etus-plugins",
+  "repository": "https://github.com/etusdigital/etus-plugins",
+  "keywords": ["product-management", "documentation", "prd", "user-stories", "elicitation", "developer-handoff"]
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PMDocs Phase Handoff",
+  "description": "Schema for phase report files written by each phase agent. Located in docs/ets/projects/{project-slug}/state/reports/",
+  "type": "object",
+  "required": ["phase", "status", "iteration", "documents", "id_state", "key_decisions", "recommendations_for_next_phase", "timestamp"],
+  "properties": {
+    "phase": {
+      "type": "string",
+      "enum": ["discovery", "planning", "design-architecture", "design-data", "design-ux", "design-api", "design", "implementation"],
+      "description": "Which phase produced this handoff"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "partial", "failed"],
+      "description": "Whether the phase completed successfully"
+    },
+    "gate_result": {
+      "type": "string",
+      "enum": ["GO", "NO-GO", "ITERATE", "DESCOPE", "REDESIGN"],
+      "description": "User decision at the gate (set after gate review)"
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "How many times this phase has been run (increments on ITERATE)"
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Relative path to generated document (e.g., docs/ets/projects/{project-slug}/discovery/project-context.md)"
+          },
+          "type": {
+            "type": "string",
+            "description": "Document type identifier (e.g., project-context, product-vision, prd)"
+          },
+          "ids_generated": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of IDs generated in this document (e.g., [\"BO-1\", \"BO-2\", \"BO-3\"])"
+          }
+        }
+      },
+      "description": "Documents produced by this phase"
+    },
+    "id_state": {
+      "type": "object",
+      "properties": {
+        "bo": { "type": "integer", "description": "Last BO-# number used" },
+        "prd-f": { "type": "integer", "description": "Last PRD-F-# number used" },
+        "us": { "type": "integer", "description": "Last US-# number used" },
+        "nfr": { "type": "integer", "description": "Last NFR-# number used" },
+        "adr": { "type": "integer", "description": "Last ADR-# number used" },
+        "impl": { "type": "integer", "description": "Last impl-# number used" }
+      },
+      "description": "Current state of all ID sequences after this phase"
+    },
+    "key_decisions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Top 3-5 decisions made during this phase"
+    },
+    "recommendations_for_next_phase": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What the next phase should focus on or be aware of"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when handoff was written"
+    }
+  },
+  "examples": [
+    {
+      "phase": "discovery",
+      "status": "complete",
+      "gate_result": "GO",
+      "iteration": 1,
+      "documents": [
+        {
+          "path": "docs/ets/projects/{project-slug}/discovery/project-context.md",
+          "type": "project-context",
+          "ids_generated": []
+        },
+        {
+          "path": "docs/ets/projects/{project-slug}/discovery/product-vision.md",
+          "type": "product-vision",
+          "ids_generated": ["BO-1", "BO-2", "BO-3"]
+        }
+      ],
+      "id_state": {
+        "bo": 3,
+        "prd-f": 0,
+        "us": 0,
+        "nfr": 0,
+        "adr": 0,
+        "impl": 0
+      },
+      "key_decisions": [
+        "Target market: Brazilian SMBs",
+        "Mobile-first approach",
+        "API-first architecture"
+      ],
+      "recommendations_for_next_phase": [
+        "Focus PRD on invoice generation workflow",
+        "Consider offline capability as Must-have",
+        "Address LGPD compliance early"
+      ],
+      "timestamp": "2026-03-14T15:30:00Z"
+    }
+  ]
+}
