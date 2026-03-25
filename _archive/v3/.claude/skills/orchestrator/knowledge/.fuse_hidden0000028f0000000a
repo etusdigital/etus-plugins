@@ -1,0 +1,500 @@
+---
+doc_meta:
+  id: qual
+  display_name: Quality Checklist
+  pillar: Implementation
+  owner_role: Tech Lead
+  summary: Pre-release quality verification checklist covering documentation completeness, traceability, technical readiness, and implementation standards.
+  order: 22
+  gate: implementation-readiness
+  requires:
+    - impl
+  optional: []
+  feeds: []
+uuid: <UUID>
+version: 0.1.0
+status: Draft
+owners:
+  - <owner>
+product: <product>
+namespace: <namespace>
+created: <YYYY-MM-DD>
+last_updated: <YYYY-MM-DD>
+tags:
+  - Quality
+  - Checklist
+  - Verification
+  - ETUS
+ai_template_variables:
+  - product
+  - owner
+  - namespace
+---
+
+# Quality Checklist - [Project Name]
+
+**Author:** [Your Name]
+**Date:** [YYYY-MM-DD]
+**Context:** Pre-Release Quality Verification
+
+---
+
+## Documentation Completeness
+
+### Core Documentation Set (21 Required)
+
+**Discovery & Planning (6 docs)**
+- [ ] **ctx** - Project Context (team, stack, constraints)
+- [ ] **vis** - Product Vision (problem, solution, market fit)
+- [ ] **brd** - Business Requirements (objectives, scope, success metrics)
+- [ ] **prd** - Product Requirements (features, PRD-F-# list, acceptance criteria)
+- [ ] **epic** - Epics (ep-# groupings of related stories)
+- [ ] **stor** - User Stories (US-# with Given/When/Then)
+
+**Technical Architecture (3 docs)**
+- [ ] **srs** - Software Requirements Spec (NFR-# non-functional requirements)
+- [ ] **arch** - Architecture Diagram & Design (system components, flows, ADRs)
+- [ ] **tech** - Tech Spec (implementation decisions, tech choices, tradeoffs)
+
+**Data Design (4 docs)**
+- [ ] **data** - Data Requirements (entities, relationships, lifecycle)
+- [ ] **erd** - Entity Relationship Diagram (Crow's foot notation)
+- [ ] **db** - Database Specification (schema, policies, migrations, constraints)
+- [ ] **dict** - Data Dictionary (all fields defined with types, business rules)
+
+**UX & Design (5 docs)**
+- [ ] **uxs** - UX Sitemap (user journeys, page structure)
+- [ ] **ux** - UX Design Decisions (interaction patterns, navigation, user flows)
+- [ ] **wire** - Wireframes (layout mockups for all pages/screens)
+- [ ] **sty** - Style Guide (colors, typography, components, design tokens)
+- [ ] **fe** - Frontend Requirements (React/Vue components, state management, API integration)
+
+**Backend (1 doc)**
+- [ ] **be** - Backend Requirements & API Spec (endpoints, schemas, auth, error handling)
+
+**Implementation (2 docs)**
+- [ ] **impl** - Implementation Plan (sprints, task breakdown, milestones, DoD)
+- [ ] **qual** - Quality Checklist (this document)
+
+**Status:** [#] / 21 documents generated
+
+### Supporting Documentation (Optional)
+
+- [ ] JTBD - Jobs To Be Done framework document
+- [ ] Personas - User persona definitions
+- [ ] User Journeys - Detailed journey maps
+- [ ] Data Flow Diagram - Data movement through system
+- [ ] API Implementation Guide - Deployment instructions
+- [ ] Security Assessment - Detailed security review
+- [ ] Performance Benchmark Results - Load test data
+- [ ] Deployment Runbook - Step-by-step launch procedure
+
+**Status:** [#] supporting docs completed
+
+---
+
+## Traceability Verification
+
+### ID Chain Validation
+
+**Chain 1: Vision → Requirements → Features → Stories → Implementation**
+
+- [ ] Business Objective (BO-#) exists for each product area
+- [ ] Each BO-# is referenced by at least one Product Feature (PRD-F-#)
+- [ ] Each PRD-F-# has acceptance criteria linking to user stories
+- [ ] Each US-# links back to PRD-F-# and BO-# (trace upstream)
+- [ ] Each Frontend Story (FS-#) links to corresponding US-#
+- [ ] Each Backend Story (BS-#) links to corresponding US-#
+
+**Example Valid Chain:**
+```
+BO-1 (Business Objective: "Enable invoice creation")
+  ↓
+PRD-F-3 (Feature: "Create Invoice")
+  ↓
+US-5 (Story: "As freelancer, I can create invoice for completed work")
+  ↓
+FS-101 (Frontend: "Build invoice form component")
+FS-102 (Frontend: "Connect form to API")
+BS-201 (Backend: "POST /invoices endpoint")
+DB-schema (Invoice table + constraints)
+```
+
+**Verification Status:**
+- [ ] All BO-# are referenced by PRD-F-#
+- [ ] All PRD-F-# are covered by US-# (no orphaned features)
+- [ ] All US-# are implemented (FS-# + BS-# tasks created)
+- [ ] All FS-# and BS-# link to parent US-#
+- [ ] No broken reference links in traceability
+
+### Data Entity Traceability
+
+- [ ] All entities in erd (Entity Relationship Diagram) exist in db (Database Spec)
+- [ ] All tables in db have corresponding dict (Data Dictionary) entries
+- [ ] All be (Backend API) endpoints document their data inputs/outputs from dict
+- [ ] All US-# acceptance criteria reference specific dict fields
+
+**Status:** [#] / [#] traceability chains verified
+
+---
+
+## Single Source of Truth (SST) Audit
+
+### Document Ownership Rules (No Duplicates)
+
+| Content Type | Owner Document | ✓ Checked |
+| ------------ | -------------- | --------- |
+| Product vision statement | vis | [ ] |
+| Problem statement | vis | [ ] |
+| Business objectives (BO-#) | brd | [ ] |
+| Product features (PRD-F-#) | prd | [ ] |
+| User stories (US-#) with Given/When/Then | stor | [ ] |
+| Epics (ep-#) | epic | [ ] |
+| Non-functional requirements (NFR-#) | srs | [ ] |
+| Architecture decisions (ADR-#) | arch | [ ] |
+| System design diagrams | arch | [ ] |
+| Technology choices | tech | [ ] |
+| Data entities and attributes | data | [ ] |
+| Entity relationships | erd | [ ] |
+| Database tables and constraints | db | [ ] |
+| Field definitions and types | dict | [ ] |
+| User personas | per | [ ] |
+| User journeys | jour | [ ] |
+| Navigation structure | uxs | [ ] |
+| Interaction patterns | ux | [ ] |
+| Page/screen layouts | wire | [ ] |
+| Design tokens (colors, spacing) | sty | [ ] |
+| Frontend components | fe | [ ] |
+| API endpoints and schemas | be | [ ] |
+
+### SST Violations Found
+
+- [ ] No duplicate definitions of business objectives
+- [ ] No duplicate feature definitions
+- [ ] No duplicate acceptance criteria
+- [ ] No duplicate data entity definitions
+- [ ] No duplicate API endpoint definitions
+
+**Violations to resolve:** [List any conflicts found, e.g., "Feature X defined in both prd and fe"]
+
+---
+
+## Technical Readiness
+
+### Non-Functional Requirements (NFRs) Verification
+
+**Performance (nfr-4 related)**
+- [ ] NFR-1: Point query response time target defined (e.g., <200ms P95)
+- [ ] NFR-2: List query response time target defined (e.g., <500ms P95)
+- [ ] NFR-3: API throughput target defined (e.g., 1000 req/s)
+- [ ] NFR-4: Search performance target defined (e.g., full-text in <500ms)
+- [ ] Actual performance measured and documented in impl (Implementation Plan)
+
+**Scalability**
+- [ ] NFR-5: Concurrent user target documented (e.g., 100 concurrent)
+- [ ] NFR-6: Data volume capacity at launch and 6-month projection
+- [ ] NFR-7: Growth rate accommodated in architecture
+
+**Reliability**
+- [ ] NFR-8: Uptime target defined (e.g., 99.9%)
+- [ ] NFR-9: Error rate threshold defined (e.g., <0.1%)
+- [ ] NFR-10: Data loss tolerance (e.g., 0 = no acceptable loss)
+
+**Security**
+- [ ] NFR-11: Authentication method chosen and documented
+- [ ] NFR-12: Authorization model documented (RBAC/ABAC/other)
+- [ ] NFR-13: Encryption requirements (in-transit, at-rest)
+- [ ] NFR-14: PII handling strategy documented
+
+**Maintainability**
+- [ ] NFR-15: Code standards defined (linting, formatting, style guide)
+- [ ] NFR-16: Test coverage target (e.g., >80%)
+- [ ] NFR-17: Documentation completeness (this checklist)
+
+**Status:** [#] / [#] NFRs quantified with targets
+
+### Architecture Soundness
+
+- [ ] Architecture diagram (arch) shows all major components
+- [ ] Data flow is clear: input → processing → output
+- [ ] Integration points are identified (databases, APIs, third-party services)
+- [ ] Critical dependencies are documented (what can't fail)
+- [ ] Fallback/failover strategies for critical services documented
+- [ ] Monitoring and alerting points identified
+
+### Architecture Decision Records (ADRs)
+
+- [ ] Major technology choices have corresponding ADRs
+- [ ] ADRs document: Context → Decision → Rationale → Consequences
+- [ ] All ADRs in arch or separate adr-*.md files
+- [ ] ADRs are referenced in relevant downstream documents
+
+**Critical ADRs to verify:**
+- [ ] ADR-001: [Decision about core technology]
+- [ ] ADR-002: [Decision about data model]
+- [ ] ADR-003: [Decision about authentication]
+
+---
+
+## Data Readiness
+
+### Schema Completeness
+
+- [ ] All entities in erd have corresponding tables in db schema
+- [ ] All tables have primary keys defined
+- [ ] All foreign key relationships are defined
+- [ ] All business rules are enforced as database constraints (CHECK, UNIQUE, NOT NULL)
+- [ ] Indexes created for: primary keys, foreign keys, frequently queried fields
+
+### Migrations & Rollback
+
+- [ ] Initial schema migrations are written and tested
+- [ ] Migration files are version-controlled and reversible
+- [ ] Data migration strategy documented (if moving from legacy system)
+- [ ] Rollback procedure documented in impl (Implementation Plan)
+
+### Seed Data
+
+- [ ] Sample/seed data prepared for development
+- [ ] Test data sets prepared for QA testing
+- [ ] Data fixtures cover happy path and error cases
+- [ ] Sample data doesn't contain real user PII
+
+### Data Validation Rules
+
+- [ ] Field-level validation rules documented in dict
+- [ ] Business rule enforcement specified (db vs app level)
+- [ ] Error messages for validation failures defined
+- [ ] Data quality metrics defined (completeness, accuracy, consistency)
+
+---
+
+## UX Readiness
+
+### Wireframe Completeness
+
+- [ ] All user journeys from uxs have corresponding wireframes
+- [ ] All form fields from stories have layout mockups
+- [ ] Error states and edge cases are wireframed
+- [ ] Responsive behavior documented for mobile/tablet/desktop
+- [ ] Accessibility considerations noted (color contrast, keyboard navigation)
+
+### Design System
+
+- [ ] Style guide defines all design tokens (colors, typography, spacing)
+- [ ] Component library identified (Material Design, custom, Headless UI)
+- [ ] Design token usage consistent across all wireframes
+- [ ] Color palette meets WCAG AA contrast standards
+
+### User Journey Validation
+
+- [ ] Happy path journey flows without blockers
+- [ ] Error paths are handled gracefully
+- [ ] Loading states shown for async operations
+- [ ] Confirmation/feedback provided for user actions
+
+---
+
+## API Readiness
+
+### Endpoint Specification
+
+- [ ] All be (Backend Requirements) endpoints defined with HTTP method
+- [ ] Request/response schemas documented in OpenAPI/JSON Schema format
+- [ ] Path parameters, query parameters, request body documented
+- [ ] Response codes documented (200, 400, 401, 403, 404, 500, etc.)
+
+### Authentication & Authorization
+
+- [ ] Auth mechanism chosen (JWT, OAuth, API keys, sessions)
+- [ ] Protected endpoints require authentication
+- [ ] Authorization rules documented (what each role can do)
+- [ ] Token/session expiration strategy documented
+
+### Error Handling
+
+- [ ] Standard error response format defined
+- [ ] All error codes documented (e.g., E001 = Invalid invoice amount)
+- [ ] Client-friendly error messages (not stack traces)
+- [ ] Rate limiting strategy documented (if applicable)
+
+### Integration Testing
+
+- [ ] Contract tests defined (what frontend expects from API)
+- [ ] Integration test cases for happy path written
+- [ ] Integration test cases for error scenarios written
+- [ ] API behavior under load tested (load test results documented)
+
+---
+
+## Security Checklist
+
+### Authentication & Authorization
+
+- [ ] Authentication method chosen (OAuth 2.0 / JWT / Sessions / MFA)
+- [ ] Passwords hashed (bcrypt/scrypt/argon2, NOT plain SHA)
+- [ ] Session tokens are cryptographically secure
+- [ ] RBAC or ABAC model defined
+- [ ] Least-privilege principle applied
+
+### Data Protection
+
+- [ ] Sensitive data fields identified (passwords, API keys, PII)
+- [ ] Sensitive data encrypted at rest (e.g., PostgreSQL pgcrypto)
+- [ ] Sensitive data encrypted in transit (TLS 1.2+)
+- [ ] PII handling documented (retention, deletion, GDPR compliance)
+- [ ] No sensitive data logged to stdout/files
+
+### API Security
+
+- [ ] HTTPS enforced (HTTP redirects to HTTPS)
+- [ ] CORS policy defined (allowed origins)
+- [ ] CSRF protection implemented (if using sessions)
+- [ ] Input validation prevents SQL injection, XSS, XXE
+- [ ] Rate limiting prevents brute force attacks
+
+### Infrastructure & Deployment
+
+- [ ] Secrets management strategy defined (env vars / vault / KMS)
+- [ ] No credentials committed to version control
+- [ ] Database backups automated and tested
+- [ ] Access logs enable security audits
+- [ ] Monitoring for suspicious activity configured
+
+### Third-Party Risk
+
+- [ ] All external APIs documented in ctx (Project Context)
+- [ ] Third-party SLAs and security posture reviewed
+- [ ] API keys/tokens stored securely (not in code)
+- [ ] Third-party libraries scanned for known vulnerabilities
+
+**Security Review:** [ ] Passed / [ ] Issues found (document below)
+
+Issues found:
+- [Issue 1]
+- [Issue 2]
+
+---
+
+## Performance Checklist
+
+### Load Testing
+
+- [ ] Load test conducted with target concurrent user count
+- [ ] Response times measured under load (P50, P95, P99)
+- [ ] Targets from nfr-4 are met
+- [ ] Database query performance validated
+- [ ] API endpoints tested at expected throughput
+
+**Load Test Results:**
+- P50 latency: [#]ms (target: [#]ms) ✓/✗
+- P95 latency: [#]ms (target: [#]ms) ✓/✗
+- P99 latency: [#]ms (target: [#]ms) ✓/✗
+- Throughput: [#] req/s (target: [#] req/s) ✓/✗
+
+### Frontend Performance
+
+- [ ] Bundle size measured and within limits (e.g., <500KB)
+- [ ] Time to Interactive (TTI) measured and acceptable
+- [ ] Lighthouse score ≥80 (performance)
+- [ ] Critical rendering path optimized (above-the-fold)
+- [ ] Unused dependencies removed
+
+### Backend Performance
+
+- [ ] Slow query logs analyzed and optimized
+- [ ] Database indexes created for hot queries
+- [ ] Connection pooling configured
+- [ ] Caching strategy implemented (Redis/memcached if needed)
+- [ ] Bottlenecks identified and addressed
+
+### Monitoring
+
+- [ ] Application performance monitoring (APM) tool integrated
+- [ ] Key metrics identified (latency, throughput, error rate)
+- [ ] Alerts configured for performance degradation
+- [ ] Dashboards set up for ops team
+
+---
+
+## Deployment & Operations
+
+### Release Checklist
+
+- [ ] Release notes written (features, fixes, known issues)
+- [ ] Deployment procedure documented and tested
+- [ ] Rollback procedure documented
+- [ ] Zero-downtime deployment strategy (if required)
+- [ ] Data migration script tested in staging
+- [ ] All tests passing in CI/CD pipeline
+
+### Post-Launch Monitoring
+
+- [ ] Log aggregation configured (ELK/Datadog/CloudWatch)
+- [ ] Error tracking enabled (Sentry/Rollbar)
+- [ ] Uptime monitoring configured (PagerDuty/alerting)
+- [ ] Key business metrics tracked (sign-ups, feature usage, etc.)
+- [ ] On-call rotation established for first week
+- [ ] Incident response playbook documented
+
+### Runbook & Documentation
+
+- [ ] Operations runbook complete (how to deploy, rollback, debug)
+- [ ] Common issues and solutions documented (FAQ for ops)
+- [ ] System architecture diagram available to ops team
+- [ ] Database schema documented (for DBA access if needed)
+- [ ] Third-party integrations documented (API credentials, webhooks)
+
+---
+
+## Quality Score
+
+### Calculation
+
+**Perfect Score: 100 points**
+
+| Category | Weight | Score | Weighted |
+| -------- | ------ | ----- | -------- |
+| Documentation Completeness | 15% | [#]/100 | [#] |
+| Traceability Verification | 15% | [#]/100 | [#] |
+| SST Audit | 10% | [#]/100 | [#] |
+| Technical Readiness | 20% | [#]/100 | [#] |
+| Data Readiness | 10% | [#]/100 | [#] |
+| UX Readiness | 10% | [#]/100 | [#] |
+| API Readiness | 10% | [#]/100 | [#] |
+| Security | 5% | [#]/100 | [#] |
+| Performance | 5% | [#]/100 | [#] |
+
+**Total Quality Score: [#]/100**
+
+### Quality Gates
+
+- **90-100:** ✅ GO - Ready for production release
+- **80-89:** ⚠️ CONDITIONAL GO - Minor issues, low risk
+- **70-79:** 🔴 NO-GO / ITERATE - Address critical gaps before release
+- **<70:** 🛑 ESCALATE - Major issues, needs stakeholder decision
+
+---
+
+## Sign-Off
+
+**Quality Review By:** [Your Name]
+**Review Date:** [YYYY-MM-DD]
+**Final Status:** [ ] GO / [ ] CONDITIONAL GO / [ ] NO-GO / [ ] ESCALATE
+
+**Comments:**
+[Any findings, issues requiring escalation, or recommendations for post-MVP improvement]
+
+**Next Steps:**
+- [ ] Proceed to production release (if GO/CONDITIONAL GO)
+- [ ] Iterate on items listed below (if NO-GO)
+- [ ] Escalate to stakeholders (if ESCALATE)
+
+**Items Requiring Iteration:**
+1. [Item 1]
+2. [Item 2]
+
+---
+
+**Last Updated:** [YYYY-MM-DD]
+**Next Review:** [After production launch] or [YYYY-MM-DD]

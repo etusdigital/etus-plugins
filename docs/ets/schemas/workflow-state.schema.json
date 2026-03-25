@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/workflow-state.schema.json",
+  "title": "ETUS Workflow State",
+  "type": "object",
+  "required": ["schema", "project_slug", "gates", "phase_status"],
+  "properties": {
+    "schema": { "const": "etus/workflow-state@v1" },
+    "project_slug": { "type": "string" },
+    "gates": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": ["pending", "go", "iterate", "descope", "redesign", "no_go"]
+      }
+    },
+    "phase_status": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": ["not_started", "in_progress", "completed", "blocked"]
+      }
+    },
+    "reports": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "current_step": { "type": "string" },
+    "last_completed_step": { "type": "string" },
+    "next_recommended_step": { "type": "string" }
+  },
+  "additionalProperties": true
+}

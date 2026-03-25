@@ -1,0 +1,72 @@
+---
+doc_meta:
+  id: workflow
+  display_name: Delivery Workflow
+  pillar: Operate
+  owner_role: Delivery Lead
+  summary: Maps the operational workflow for progressing work from idea through release.
+  order: 0.8
+  gate: meta
+  requires: []
+  optional: []
+  feeds: []
+uuid: <UUID>
+version: 1.0.0
+status: Guide
+owners:
+- <orchestrator>
+product: <product>
+namespace: <namespace>
+created: <YYYY-MM-DD>
+last_updated: <YYYY-MM-DD>
+tags:
+- Workflow
+- Process
+- ETUS
+ai_template_variables:
+- product
+- owner
+- namespace
+---
+
+# ETUS Workflow — Phases, Outputs & Destinations
+
+**Repository destination:** everything under `/docs` with phase subfolders.
+
+---
+
+## Phases → Outputs → Destination
+
+| Phase          | Output (file)                                                                                              | Owner        | Destination                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------- | ------------ | ---------------------------- |
+| Analysis       | `product-brief.md`                                                                                         | Analyst/PM   | `docs/analysis/briefs/`      |
+| Analysis       | `brainstorming-output.md`                                                                                  | Facilitator  | `docs/analysis/brainstorms/` |
+| Analysis       | `market-research.md`                                                                                       | Analyst      | `docs/analysis/research/`    |
+| Analysis       | `competitor-analysis.md`                                                                                   | Analyst      | `docs/analysis/research/`    |
+| Planning       | `prd.md`                                                                                                   | PM           | `docs/planning/`             |
+| Planning       | `epics.md`                                                                                                 | PM           | `docs/planning/`             |
+| Planning       | `user-stories.md`                                                                                          | PM           | `docs/planning/`             |
+| Solutioning    | `story/US-###.md`                                                                                          | Dev/QA       | `docs/solutioning/stories/`  |
+| Solutioning    | `frd.md`                                                                                                   | PM/Eng       | `docs/solutioning/`          |
+| Implementation | `srs.md`                                                                                                   | Eng          | `docs/implementation/`       |
+| Implementation | `architecture-diagram.md`                                                                                  | Arch         | `docs/implementation/`       |
+| Implementation | `tech-spec.md`                                                                                             | Eng          | `docs/implementation/`       |
+| Implementation | `backend-requirements.md`                                                                                  | BE           | `docs/implementation/`       |
+| Implementation | `frontend-requirements.md`                                                                                 | FE           | `docs/implementation/`       |
+| Data           | `drd.md`, `dbrd.md`, `data-flow-diagram.md`, `data-dictionary.md`, `database-schema.md`, `data-catalog.md` | Data         | `docs/data/`                 |
+| UX             | `uxsm.md`, `wireframes.md`, `uxdd.md`, `design-requirements.md`, `style-guide.md`                          | UX           | `docs/ux/`                   |
+| Meta           | `checklists.md`, `workflow.md`, `README.md`                                                                | Orchestrator | `docs/meta/`                 |
+
+## Orchestration (roles)
+
+- **Analyst/PM/Architect** conduzem _Analysis & Planning_;
+- **Scrum/Dev/QA** conduzem _Solutioning & Implementation_;
+- **Data/UX** cruzam as fases conforme artefatos.
+
+## Hand‑offs (by ID)
+
+- Vision → JTBD/Journey → BRD → **PRD‑F** → Epics → US → FR → **SRS** → Arch/Tech → FE/BE/Data/UX.
+
+## Rules (No‑Overlap)
+
+- Aceitação só em **User Stories**; NFRs numéricos só no **SRS**; tokens só no **Style Guide**; payload `dict.*` só no **Data Dictionary**.

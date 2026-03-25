@@ -1,0 +1,85 @@
+---
+doc_meta:
+  id: brief
+  display_name: Product Brief
+  pillar: Define
+  owner_role: Product Lead
+  summary: Condenses problem, audience, and solution guardrails into a quick-start
+    artifact.
+  order: 1.2
+  gate: vision
+  requires:
+  - vis
+  optional: []
+  feeds:
+  - per
+  - jour
+  - brd
+uuid: <UUID>
+version: 1.0.0
+status: Draft
+owners:
+- <owner>
+product: <product>
+namespace: <namespace>
+created: <YYYY-MM-DD>
+last_updated: <YYYY-MM-DD>
+tags:
+- Brief
+- Discovery
+- ETUS
+ai_template_variables:
+- product
+- owner
+- namespace
+---
+
+# Product Brief — [Initiative Name]
+
+**Author:** [Your Name] · **Date:** [YYYY-MM-DD]  
+**Recommended path:** `docs/discovery/briefs/product-brief.md`
+
+---
+
+## 1) Objective & Context
+
+- **Objective (one-liner):** […]
+- **Problem link:** see `product-vision.md` (HMW/5W2H/NSM)
+- **Why now:** […]
+- **Related initiatives:** [PRD‑F‑#], [ep‑#] (if any)
+
+## 2) Target Users & JTBD (summary)
+
+- **Primary job(s):** When […], I want […], so I can […]
+- **Decision criteria:** [TTV < X, cost < Y, risk Z]
+
+## 3) Scope Boundaries
+
+- **In-scope:** […]
+- **Out-of-scope:** […] _(explicit)_
+
+## 4) Success Signals (early → outcome)
+
+- **Leading:** […, …]
+- **Lagging:** […, …] _(tied to NSM/BO)_
+
+## 5) Key Assumptions & Questions
+
+| ID  | Assumption / Question | Confidence | Next Action |
+| --- | --------------------- | ---------- | ----------- |
+| A1  | […]                   | Low/Med    | Test [… ]   |
+
+## 6) Risks (top 3) & Mitigations
+
+- **R1:** […] → **Mitigation:** […] _(owner)_
+
+## 7) References
+
+- Brainstorm output, Market Research, Competitor Analysis
+
+## ✅ Brief Gate
+
+- [ ] Clear & measurable objective
+- [ ] Explicit in/out boundaries
+- [ ] Assumptions + next actions
+- [ ] Top‑3 risks with mitigation

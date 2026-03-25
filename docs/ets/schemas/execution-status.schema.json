@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/execution-status.schema.json",
+  "title": "ETUS Execution Status",
+  "type": "object",
+  "required": ["schema", "project_slug", "execution_adapter", "units"],
+  "properties": {
+    "schema": { "const": "etus/execution-status@v1" },
+    "project_slug": { "type": "string" },
+    "execution_adapter": { "enum": ["none", "local", "linear"] },
+    "current_unit": { "type": "string" },
+    "units": { "type": "object", "additionalProperties": true },
+    "item_status": { "type": "object", "additionalProperties": true },
+    "feature_rollups": { "type": "object", "additionalProperties": true },
+    "updated_at": { "type": "string" }
+  },
+  "additionalProperties": true
+}

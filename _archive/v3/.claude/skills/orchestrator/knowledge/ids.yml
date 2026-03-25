@@ -1,0 +1,225 @@
+# ids.yml — ETUS / ID Registry (updated with BMAD-derived docs)
+registry:
+  version: 2
+  product: "<product>"
+  namespace: "<namespace>"
+  owner: "<owner>"
+  updated: "<YYYY-MM-DD>"
+
+conventions:
+  charset: lower-kebab-case
+  casing:
+    domain: kebab-case
+    path: kebab-case # routes
+    params: camelCase # route params
+  separators:
+    dot: "."
+    slash: "/"
+    colon: ":"
+    hash: "#"
+    at: "@"
+  invariants:
+    - "IDs are immutable once published"
+    - "IDs are unique within the namespace"
+    - "Deprecations must carry an alias with an expiration date"
+  reserved:
+    - "no spaces or diacritics"
+    - "no trailing slash in routes"
+    - "avoid OS-reserved names"
+
+namespaces:
+  docs:
+    # canonical doc_meta.id values
+    - readme
+    - workflow # internal process overview (if any)
+    - wf-greenfield
+    - checks
+    - archcheck
+    - storydod
+
+    # Discover
+    - vis
+    - per
+    - brief
+    - brain
+    - bstech
+    - elicit
+    - mr
+    - comp
+    - jour
+    - brd
+
+    # Define / Plan
+    - prd
+    - epic
+    - stor
+    - storyw
+    - frd
+
+    # Develop / Implement
+    - srs
+    - arch
+    - tech
+    - be
+    - fe
+
+    # Data
+    - data
+    - db
+    - flow
+    - erd
+    - sql
+    - dict
+    - cat
+
+    # UX
+    - uxs
+    - wire
+    - ux
+    - des
+    - sty
+
+patterns:
+  # Product planning / delivery
+  prd_feature:
+    id: "^PRD-F-(\\d+)$"
+    next: 1
+  epic:
+    id: "^ep-(\\d+)$"
+    next: 1
+  story:
+    id: "^US-(\\d+)$"
+    next: 1
+  fr:
+    id: "^FR-(\\d+)$"
+    next: 1
+  nfr:
+    id: "^NFR-(\\d+)$"
+    next: 1
+  bo: # Business Objective
+    id: "^BO-(\\d+)$"
+    next: 1
+  adr: # Architecture Decision Record
+    id: "^ADR-(\\d+)$"
+    next: 1
+
+  # UI / Navigation
+  route:
+    id: "^r:\\/[a-z0-9\\-\\/:]*$"
+  view:
+    id: "^view\\.[a-z0-9\\-]+(\\.[a-z0-9\\-]+){1,2}$"
+  component:
+    id: "^cmp\\.[a-z0-9\\-]+\\.[a-z0-9\\-]+$"
+  view_state:
+    id: "^view\\.[a-z0-9\\-]+(\\.[a-z0-9\\-]+){1,2}#[a-z0-9\\-]+$"
+
+  # Data (conceptual + physical + telemetry)
+  entity:
+    # canonical: ent.<domain>.<name>
+    id: "^ent\\.[a-z0-9\\-]+\\.[a-z0-9\\-]+$"
+  table:
+    # physical table names use snake_case by convention
+    id: "^tbl\\.[a-z0-9\\_]+$"
+  field:
+    id: "^dict\\.[a-z0-9\\-]+\\.[a-z0-9\\-]+$"
+  event:
+    # optional version suffix @vN
+    id: "^ev\\.[a-z0-9\\-]+\\.[a-z0-9\\-]+(@v\\d+)?$"
+  pipeline:
+    id: "^pipe\\.(ingest|transform|deliver)\\.[a-z0-9\\-]+$"
+
+  # Backend / API
+  endpoint:
+    id: "^be-ep-(\\d+)$"
+    next: 1
+  schema:
+    # Optional: name your schemas; case allowed after second dot for readability
+    id: "^schema\\.[a-z0-9\\-]+\\.[A-Za-z0-9\\-]+(@v\\d+)?$"
+
+sequences:
+  PRD-F: 1
+  ep: 1
+  US: 1
+  FR: 1
+  NFR: 1
+  BO: 1
+  ADR: 1
+  be-ep: 1
+
+documents:
+  # Recommended destinations and filename patterns for key docs
+  brief:
+    destination: "docs/discovery/briefs/"
+    filename_pattern: "^product-brief\\.md$|^[a-z0-9\\-]+\\.md$"
+  brain:
+    destination: "docs/discovery/brainstorms/"
+    filename_pattern: "^(?:\\d{4}\\/\\d{2}-\\d{2}-[a-z0-9\\-]+\\.md|brainstorming-output\\.md)$"
+  bstech:
+    destination: "docs/discovery/brainstorms/"
+    filename_pattern: "^brainstorming-techniques\\.md$"
+  elicit:
+    destination: "docs/discovery/"
+    filename_pattern: "^elicitation-methods\\.md$"
+  mr:
+    destination: "docs/discovery/research/"
+    filename_pattern: "^market-research\\.md$|^[a-z0-9\\-]+\\.md$"
+  comp:
+    destination: "docs/discovery/research/"
+    filename_pattern: "^competitor-analysis\\.md$|^[a-z0-9\\-]+\\.md$"
+  storyw:
+    destination: "docs/solutioning/stories/"
+    filename_pattern: "^US-\\d+\\.story\\.md$"
+  archcheck:
+    destination: "docs/meta/checklists/"
+    filename_pattern: "^architect-checklist\\.md$"
+  storydod:
+    destination: "docs/meta/checklists/"
+    filename_pattern: "^story-dod-checklist\\.md$"
+  wf-greenfield:
+    destination: "docs/meta/workflows/"
+    filename_pattern: "^greenfield-fullstack\\.md$"
+
+aliases:
+  deprecated:
+    # Legacy → canonical
+    - from: "GV.Root"
+      to: "r:/"
+      expiration_date: "<YYYY-MM-DD>"
+    - from: "GV.Auth.Login"
+      to: "r:/auth/login"
+      expiration_date: "<YYYY-MM-DD>"
+    - from: "UV.Dashboard.Home"
+      to: "view.dashboard.home"
+      expiration_date: "<YYYY-MM-DD>"
+    # Optional: numeric entity ids -> named entities
+    - from: "ent-001"
+      to: "ent.auth.user"
+      expiration_date: "<YYYY-MM-DD>"
+    - from: "ent-002"
+      to: "ent.auth.session"
+      expiration_date: "<YYYY-MM-DD>"
+
+lint:
+  rules:
+    - "Only user-stories.md may contain Gherkin (Given/When/Then)."
+    - "Docs with doc_meta.id 'storyw' must not contain the words Given/When/Then (acceptance lives in user-stories.md)."
+    - "Only tech-spec.md may define NFR numeric targets (NFR-#)."
+    - "Only prd.md may define PRD features (PRD-F-#)."
+    - "uxsm.md must not contain tokens/CSS or payload schemas."
+    - "All cross-refs must resolve to existing IDs (PRD-F→ep→US→FR; route/view/event/entity/table/endpoint)."
+    - "Route IDs must match patterns.route.id; view IDs must match patterns.view.id."
+    - "Events must be defined in Data Dictionary before use."
+    - "Tables/columns semantics must be referenced via dict.*, not redefined elsewhere."
+    - "Docs should begin with a YAML front-matter delimiter '---'."
+  on_violation: "fail"
+
+governance:
+  change_control:
+    proposal: "Open PR updating ids.yml and the affected docs."
+    review: "PM + Tech Lead + Data sign-off"
+    publish: "Merge → bump registry.version and doc versions"
+  deprecation:
+    policy: "Add to aliases.deprecated with expiration_date; remove after T+2 releases"
+  versioning:
+    docs: "Semantic version per file (front-matter version)"
+    api: "Breaking → new major; use feature flags for phased rollout"

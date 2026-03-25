@@ -1,0 +1,83 @@
+# Elicitation State Template
+# Source of truth for interview execution progress.
+# Semantic coverage is tracked separately in coverage-matrix.yaml.
+
+meta:
+  mode: product
+  session_id: ""
+  started_at: ""
+  last_activity: ""
+
+current_module: ingest
+current_probe: ""
+questions_asked: 0
+stories_collected: 0
+
+module_state:
+  ingest:
+    status: not_started
+    questions_asked: 0
+  problem:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  actors:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+    archetype_probes_done: false
+  jobs:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  journeys:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  cases:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  edges:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  assumptions:
+    status: not_started
+    questions_asked: 0
+    stories_collected: 0
+    snapshots: []
+  brainstorm:
+    status: blocked
+    blocked_by: "Minimum coverage not met"
+    questions_asked: 0
+  synth:
+    status: not_started
+    questions_asked: 0
+
+response_quality:
+  vague_count: 0
+  escalated_count: 0
+  dont_know_count: 0
+  dont_know_classified: 0
+
+fatigue:
+  threshold: 15
+  current: 0
+  offered_pause: false
+
+pending_probes: []
+
+unresolved_dimensions: []
+
+reflection_due: false
+
+active_archetypes: []
+
+checkpoints: []

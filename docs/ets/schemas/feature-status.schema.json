@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/feature-status.schema.json",
+  "title": "ETUS Feature Status",
+  "type": "object",
+  "required": [
+    "schema",
+    "workflow_version",
+    "feature_slug",
+    "mode",
+    "execution_adapter",
+    "discovery_state",
+    "delivery_state",
+    "release_state",
+    "governance_state",
+    "current_step",
+    "next_recommended_step"
+  ],
+  "properties": {
+    "schema": { "const": "etus/feature-status@v1" },
+    "workflow_version": { "type": "string" },
+    "project_slug": { "type": "string" },
+    "feature_slug": { "type": "string" },
+    "title": { "type": "string" },
+    "mode": { "const": "feature" },
+    "execution_adapter": { "enum": ["none", "local", "linear"] },
+    "discovery_state": {
+      "enum": ["intake", "problem_framed", "opportunity_selected", "solution_exploring", "solution_selected"]
+    },
+    "delivery_state": {
+      "enum": ["not_started", "brief_ready", "stories_ready", "delta_ready", "impl_ready", "in_build", "in_review", "ready_to_release"]
+    },
+    "release_state": {
+      "enum": ["not_released", "internal", "beta", "canary", "partial_rollout", "full_rollout", "paused", "rolled_back"]
+    },
+    "governance_state": {
+      "enum": ["active", "stale", "cleanup_required", "archived"]
+    },
+    "risk_state": {
+      "type": "object",
+      "properties": {
+        "value": { "enum": ["open", "reduced", "validated", "accepted"] },
+        "usability": { "enum": ["open", "reduced", "validated", "accepted"] },
+        "viability": { "enum": ["open", "reduced", "validated", "accepted"] },
+        "feasibility": { "enum": ["open", "reduced", "validated", "accepted"] }
+      },
+      "additionalProperties": false
+    },
+    "current_step": { "type": "string" },
+    "last_completed_step": { "type": "string" },
+    "next_recommended_step": { "type": "string" },
+    "linked_docs": { "type": "object", "additionalProperties": { "type": "string" } },
+    "traceability": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+    "gates": { "type": "object", "additionalProperties": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

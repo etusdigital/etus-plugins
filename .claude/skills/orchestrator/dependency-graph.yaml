@@ -1,0 +1,469 @@
+# ETUS PMDocs — Centralized Dependency Graph v2.0
+# Single Source of Truth for all document dependencies across all work modes.
+#
+# Terminology:
+#   requires    = BLOCKS — skill refuses to run if missing. Auto-invoke upstream.
+#   enriched-by = ENRICHES — skill warns but proceeds. Output is better with context.
+#   produces    = output file path relative to project root
+#   skill       = skill name (matches SKILL.md name field)
+#   phase       = discovery | planning | design | implementation
+#   ids         = ID patterns this document generates (for traceability)
+#
+# Dependency chain (longest path):
+#   project-context → baseline → product-vision → ost → prd → user-stories → architecture-diagram → tech-spec
+#   (depth = 8, but max recursion from any single skill is still ≤5 hops)
+#
+# ── MODE-AWARE DEPENDENCY RULES ──────────────────────────────────────────
+#
+# Dependencies vary by mode. The "requires" and "enriched-by" fields below
+# describe the default (Product mode) behavior. Other modes override as follows:
+#
+# Product mode (default):
+#   All BLOCKS and ENRICHES dependencies enforced as listed below.
+#
+# Feature mode:
+#   project-context and product-vision change from BLOCKS to ENRICHES.
+#   These documents are read if they exist but do NOT block skill execution.
+#   Feature-mode skills (feature-brief, design-delta) have their own entries below.
+#
+# Bug mode:
+#   No BLOCKS dependencies at all. The tech-spec-standalone skill runs
+#   completely standalone. All existing documents are treated as ENRICHES
+#   (read if available, never required).
+#
+# Spike mode:
+#   No BLOCKS dependencies at all. The spike skill runs completely standalone.
+#   All existing documents are treated as ENRICHES (read if available, never required).
+
+documents:
+
+  # ── Phase 1: Discovery ──────────────────────────────────────────────
+
+  opportunity-pack:
+    produces: docs/ets/projects/{project-slug}/discovery/opportunity-pack.md
+    requires: []
+    enriched-by: []
+    skill: ideate
+    phase: discovery
+    ids: [ACT-#, JTBD-#, JOUR-#, UC-#, EDGE-#, ASM-#]
+
+  coverage-matrix:
+    produces: docs/ets/projects/{project-slug}/state/coverage-matrix.yaml
+    requires: [opportunity-pack]
+    enriched-by: []
+    skill: ideate
+    phase: discovery
+    ids: []
+
+  project-context:
+    produces: docs/ets/projects/{project-slug}/discovery/project-context.md
+    requires: [opportunity-pack]
+    enriched-by: [coverage-matrix]
+    skill: project-context
+    phase: discovery
+    ids: []
+
+  baseline:
+    produces: docs/ets/projects/{project-slug}/discovery/baseline.md
+    requires: [project-context]
+    enriched-by: [product-vision, opportunity-pack, coverage-matrix]
+    skill: baseline
+    phase: discovery
+    ids: []
+
+  product-vision:
+    produces: docs/ets/projects/{project-slug}/discovery/product-vision.md
+    requires: [project-context, opportunity-pack]
+    enriched-by: [baseline, coverage-matrix]
+    skill: product-vision
+    phase: discovery
+    ids: [BO-#]
+
+  discovery-report:
+    produces: docs/ets/projects/{project-slug}/discovery/discovery-report.md
+    requires: [baseline, project-context]
+    enriched-by: [product-vision, opportunity-pack, coverage-matrix]
+    skill: discovery-report
+    phase: discovery
+    ids: [H-#]
+
+  # ── Phase 2: Planning ───────────────────────────────────────────────
+
+  ost:
+    produces: docs/ets/projects/{project-slug}/planning/ost.md
+    requires: [product-vision, baseline]
+    enriched-by: [project-context, opportunity-pack, coverage-matrix]
+    skill: ost
+    phase: planning
+    ids: [O-#, S-#.#]
+
+  prioritization:
+    produces: docs/ets/projects/{project-slug}/planning/prioritization.md
+    requires: [ost]
+    enriched-by: [baseline, product-vision]
+    skill: prioritization
+    phase: planning
+    ids: []
+
+  solution-discovery:
+    produces: docs/ets/projects/{project-slug}/planning/solution-discovery.md
+    requires: [ost, prioritization, product-vision]
+    enriched-by: [project-context, baseline, discovery-report, opportunity-pack, coverage-matrix]
+    skill: solution-discovery
+    phase: planning
+    ids: [SOL-#, EXP-#]
+
+  prd:
+    produces: docs/ets/projects/{project-slug}/planning/prd.md
+    requires: [product-vision, prioritization, solution-discovery]
+    enriched-by: [project-context, baseline, opportunity-pack, coverage-matrix, ost]
+    skill: prd
+    phase: planning
+    ids: [PRD-F-#]
+
+  user-stories:
+    produces: docs/ets/projects/{project-slug}/planning/user-stories.md
+    requires: [prd, solution-discovery]
+    enriched-by: [product-vision, opportunity-pack, coverage-matrix]
+    skill: user-stories
+    phase: planning
+    ids: [US-#]
+
+  feature-spec:
+    produces: docs/ets/projects/{project-slug}/planning/feature-specs/feature-spec-{name}.md
+    requires: [prd, user-stories]
+    enriched-by: [product-vision]
+    skill: feature-spec
+    phase: planning
+    ids: ["FS-{name}-#"]
+
+  # ── Phase 3a: Architecture ──────────────────────────────────────────
+
+  architecture-diagram:
+    produces: docs/ets/projects/{project-slug}/architecture/architecture-diagram.md
+    requires: [prd, user-stories]
+    enriched-by: [project-context]
+    skill: architecture-diagram
+    phase: design
+    ids: []
+
+  tech-spec:
+    produces: docs/ets/projects/{project-slug}/architecture/tech-spec.md
+    requires: [architecture-diagram]
+    enriched-by: [prd, project-context]
+    skill: tech-spec
+    phase: design
+    ids: [NFR-#, ADR-#]
+
+  # ── Phase 3b: Data Design (sequential pipeline) ────────────────────
+
+  data-requirements:
+    produces: docs/ets/projects/{project-slug}/data/data-requirements.md
+    requires: [user-stories]
+    enriched-by: [prd]
+    skill: data-requirements
+    phase: design
+    ids: []
+
+  erd:
+    produces: docs/ets/projects/{project-slug}/data/erd.md
+    requires: [data-requirements]
+    enriched-by: []
+    skill: erd
+    phase: design
+    ids: []
+
+  database-spec:
+    produces: docs/ets/projects/{project-slug}/data/database-spec.md
+    requires: [erd]
+    enriched-by: [tech-spec]
+    skill: database-spec
+    phase: design
+    ids: []
+
+  data-dictionary:
+    produces: docs/ets/projects/{project-slug}/data/data-dictionary.md
+    requires: [database-spec]
+    enriched-by: []
+    skill: data-dictionary
+    phase: design
+    ids: [dict.*, ev.*]
+
+  data-flow-diagram:
+    produces: docs/ets/projects/{project-slug}/data/data-flow-diagram.md
+    requires: [erd, data-dictionary]
+    enriched-by: [architecture-diagram]
+    skill: data-flow-diagram
+    phase: design
+    ids: []
+
+  data-catalog:
+    produces: docs/ets/projects/{project-slug}/data/data-catalog.md
+    requires: [database-spec, data-dictionary, data-flow-diagram]
+    enriched-by: []
+    skill: data-catalog
+    phase: design
+    ids: []
+
+  # ── Phase 3b: UX Design (sequential pipeline) ──────────────────────
+
+  user-journey:
+    produces: docs/ets/projects/{project-slug}/ux/user-journey.md
+    requires: [product-vision]
+    enriched-by: [user-stories]
+    skill: user-journey
+    phase: design
+    ids: [JOUR-#]
+
+  ux-sitemap:
+    produces: docs/ets/projects/{project-slug}/ux/ux-sitemap.md
+    requires: [user-journey]
+    enriched-by: [wireframes]
+    skill: ux-sitemap
+    phase: design
+    ids: []
+
+  wireframes:
+    produces: docs/ets/projects/{project-slug}/ux/wireframes.md
+    requires: [ux-sitemap]
+    enriched-by: [style-guide]
+    skill: wireframes
+    phase: design
+    ids: []
+
+  style-guide:
+    produces: docs/ets/projects/{project-slug}/ux/style-guide.md
+    requires: [wireframes]
+    enriched-by: []
+    skill: style-guide
+    phase: design
+    ids: [tok.*]
+
+  # ── Phase 3b: API Design ────────────────────────────────────────────
+
+  api-spec:
+    produces: docs/ets/projects/{project-slug}/api/api-spec.md
+    requires: [tech-spec, database-spec, user-stories]
+    enriched-by: [architecture-diagram]
+    skill: api-spec
+    phase: design
+    ids: []
+
+  # ── Phase 4: Implementation ─────────────────────────────────────────
+
+  implementation-plan:
+    produces: docs/ets/projects/{project-slug}/implementation/implementation-plan.md
+    requires: [user-stories, tech-spec]
+    enriched-by: [api-spec, architecture-diagram]
+    skill: implementation-plan
+    phase: implementation
+    ids: [impl-#]
+
+  quality-checklist:
+    produces: docs/ets/projects/{project-slug}/implementation/quality-checklist.md
+    requires: [user-stories, tech-spec]
+    enriched-by: [implementation-plan]
+    skill: quality-checklist
+    phase: implementation
+    ids: []
+
+  release-plan:
+    produces: docs/ets/projects/{project-slug}/implementation/release-plan.md
+    requires: [implementation-plan, quality-checklist]
+    enriched-by: [tech-spec, prd]
+    skill: release-plan
+    phase: implementation
+    ids: []
+
+  execution-status:
+    produces: docs/ets/projects/{project-slug}/state/execution-status.yaml
+    requires: [implementation-plan]
+    enriched-by: [feature-index]
+    skill: sprint-status
+    phase: optional-execution
+    ids: []
+
+  execution-sync:
+    produces: docs/ets/projects/{project-slug}/state/execution-sync.yaml
+    requires: [execution-status]
+    enriched-by: []
+    skill: sprint-status
+    phase: optional-execution
+    ids: []
+
+  # ── Mode-Specific Skills ────────────────────────────────────────────
+
+  # Feature mode skills
+
+  feature-brief:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/feature-brief.md
+    requires: [opportunity-pack, feature-solution-discovery, feature-status]
+    enriched-by: [coverage-matrix, project-context, product-vision, prd]
+    skill: feature-brief
+    phase: feature
+    ids: [FB-#]
+
+  feature-status:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/feature-status.md
+    requires: []
+    enriched-by: [project-context, product-vision]
+    skill: feature
+    phase: feature
+    ids: []
+
+  feature-solution-discovery:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/solution-discovery.md
+    requires: [opportunity-pack, coverage-matrix]
+    enriched-by: [project-context, product-vision, ost, prioritization]
+    skill: solution-discovery
+    phase: feature
+    ids: [SOL-#, EXP-#]
+
+  design-delta:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/design-delta.md
+    requires: [feature-brief, feature-solution-discovery, feature-status]
+    enriched-by: [architecture-diagram, tech-spec, database-spec, api-spec]
+    skill: design-delta
+    phase: feature
+    ids: []
+
+  feature-user-stories:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/user-stories.md
+    requires: [feature-brief, feature-solution-discovery, feature-status]
+    enriched-by: [coverage-matrix, product-vision, prd]
+    skill: user-stories
+    phase: feature
+    ids: [US-#]
+
+  feature-implementation-plan:
+    produces: docs/ets/projects/{project-slug}/features/{feature-slug}/impl-plan.md
+    requires: [feature-user-stories, design-delta, feature-status]
+    enriched-by: [feature-brief, feature-solution-discovery, tech-spec, architecture-diagram]
+    skill: implementation-plan
+    phase: feature
+    ids: [impl-#]
+
+  # Bug mode skill
+
+  tech-spec-standalone:
+    produces: docs/ets/projects/{project-slug}/bugs/tech-spec-{slug}.md
+    requires: [opportunity-pack]
+    enriched-by: [coverage-matrix]
+    skill: tech-spec-standalone
+    phase: bug
+    ids: []
+
+  # Spike mode skill
+
+  spike:
+    produces: docs/ets/projects/{project-slug}/spikes/spike-{slug}.md
+    requires: [opportunity-pack]
+    enriched-by: [coverage-matrix]
+    skill: spike
+    phase: spike
+    ids: []
+
+  # Cross-mode skills
+
+  correct-course:
+    produces: docs/ets/projects/{project-slug}/implementation/change-proposal-{slug}.md
+    requires: []  # At least one existing doc must exist, but not a specific one
+    enriched-by: [prd, user-stories, implementation-plan, tech-spec, architecture-diagram, ost, sprint-status]
+    skill: correct-course
+    phase: anytime
+    ids: []
+
+  project-retrospective:
+    produces: docs/ets/projects/{project-slug}/learnings/project-retrospective.md
+    requires: []
+    enriched-by:
+      - project-context
+      - product-vision
+      - prd
+      - user-stories
+      - feature-spec
+      - architecture-diagram
+      - tech-spec
+      - data-requirements
+      - erd
+      - database-spec
+      - data-dictionary
+      - data-flow-diagram
+      - data-catalog
+      - user-journey
+      - ux-sitemap
+      - wireframes
+      - style-guide
+      - api-spec
+      - implementation-plan
+      - sprint-status
+      - quality-checklist
+    skill: project-retrospective
+    phase: any
+    ids: []
+
+# ── Phase Transitions: Entry & Exit Criteria ────────────────────────
+
+phase-transitions:
+
+  ideation-to-discovery:
+    exit-criteria:
+      - opportunity-pack.md exists with actors, JTBDs, journeys, use cases, edge cases, and assumptions
+      - coverage-matrix.yaml exists with mode-aware thresholds populated
+      - problem is described independently from the proposed solution
+      - guardrails and blocking questions are explicit
+    entry-criteria:
+      - Ideation Readiness Gate = GO
+    handoff: docs/ets/projects/{project-slug}/state/coverage-matrix.yaml
+
+  discovery-to-opportunities:
+    exit-criteria:
+      - opportunity-pack.md exists and was used as source for downstream docs
+      - coverage-matrix.yaml meets mode-aware thresholds
+      - project-context.md exists and has all 5W2H sections filled
+      - baseline.md exists with current state metrics and data quality assessment
+      - discovery-report.md exists with evidence, insights by theme, and hypotheses (H-#)
+      - product-vision.md has at least 2 BO-# with measurable metrics
+      - BMAD brainstorm completed with user-selected techniques
+    entry-criteria:
+      - Discovery Gate = GO
+    handoff: docs/ets/projects/{project-slug}/state/reports/discovery.json
+
+  opportunities-to-solution:
+    exit-criteria:
+      - ost.md exists with structured opportunities linked to outcomes
+      - prioritization.md exists with explicit ranking of opportunities
+    entry-criteria:
+      - Opportunity Focus Gate = GO
+    handoff: docs/ets/projects/{project-slug}/state/reports/opportunities.json
+
+  solution-to-requirements:
+    exit-criteria:
+      - solution-discovery.md exists with at least 2 SOL-# options unless scope is trivially narrow
+      - solution-discovery.md evaluates value, usability, viability, and feasibility
+      - unresolved risks are explicit
+      - a recommended solution direction is present
+    entry-criteria:
+      - Solution Readiness Gate = GO
+    handoff: docs/ets/projects/{project-slug}/state/reports/solution-report.json
+
+  requirements-to-design:
+    exit-criteria:
+      - prd.md has MoSCoW-prioritized features with at least 3 Must Have PRD-F-#
+      - user-stories.md has US-# for every Must Have PRD-F-# with Given/When/Then
+      - Feature specs exist for features with >3 business rules
+    entry-criteria:
+      - Requirements Gate = GO or DESCOPE (with documented scope reduction)
+    handoff: docs/ets/projects/{project-slug}/state/reports/planning.json
+
+  design-to-implementation:
+    exit-criteria:
+      - architecture-diagram.md has C4 Context + Container views minimum
+      - tech-spec.md has quantified NFR-# targets (not qualitative)
+      - database-spec.md has DDL for all entities in erd.md
+      - api-spec.md covers all US-# that require API endpoints
+      - user-journey.md has JOUR-# for each persona with PRD-F-# linkage
+      - Adversarial Review completed with no unresolved Critical concerns
+    entry-criteria:
+      - Implementation Readiness Gate = GO
+    handoff: docs/ets/projects/{project-slug}/state/reports/design.json

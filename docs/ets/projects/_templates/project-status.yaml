@@ -1,0 +1,10 @@
+schema: etus/project-status@v1
+workflow_version: "6.0"
+project_slug: ""
+mode: product
+execution_adapter: none
+current_phase: ideate
+last_completed_phase: ""
+next_step: /ideate
+sync_blocked: false
+active_feature_slug: ""

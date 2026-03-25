@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+:root {
+  color: #1c1917;
+  background: #f7f3ee;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.card-surface {
+  @apply rounded-2xl border border-stone-200 bg-white shadow-sm;
+}
+
+.prose-console pre {
+  @apply overflow-x-auto rounded-xl bg-stone-950 p-4 text-sm text-stone-100;
+}
+

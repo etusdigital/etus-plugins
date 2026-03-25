@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/project-status.schema.json",
+  "title": "ETUS Project Status",
+  "type": "object",
+  "required": [
+    "schema",
+    "workflow_version",
+    "project_slug",
+    "mode",
+    "execution_adapter",
+    "current_phase",
+    "next_step"
+  ],
+  "properties": {
+    "schema": { "const": "etus/project-status@v1" },
+    "workflow_version": { "type": "string" },
+    "project_slug": { "type": "string" },
+    "mode": { "enum": ["product", "feature", "bug", "spike"] },
+    "execution_adapter": { "enum": ["none", "local", "linear"] },
+    "current_phase": {
+      "enum": [
+        "ideate",
+        "discovery",
+        "opportunities",
+        "solution",
+        "requirements",
+        "design",
+        "implementation",
+        "release",
+        "retrospective"
+      ]
+    },
+    "last_completed_phase": { "type": "string" },
+    "next_step": { "type": "string" },
+    "sync_blocked": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

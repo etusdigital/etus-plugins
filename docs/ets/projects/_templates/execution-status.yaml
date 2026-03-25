@@ -1,0 +1,8 @@
+schema: etus/execution-status@v1
+project_slug: ""
+execution_adapter: none
+current_unit: ""
+units: {}
+item_status: {}
+feature_rollups: {}
+updated_at: ""

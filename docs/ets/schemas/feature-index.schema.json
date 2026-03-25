@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/feature-index.schema.json",
+  "title": "ETUS Feature Index",
+  "type": "object",
+  "required": ["schema", "project_slug", "features"],
+  "properties": {
+    "schema": { "const": "etus/feature-index@v1" },
+    "project_slug": { "type": "string" },
+    "features": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "execution_adapter": { "enum": ["none", "local", "linear"] },
+          "status_path": { "type": "string" },
+          "discovery_state": { "type": "string" },
+          "delivery_state": { "type": "string" },
+          "release_state": { "type": "string" },
+          "governance_state": { "type": "string" },
+          "next_recommended_step": { "type": "string" },
+          "updated_at": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

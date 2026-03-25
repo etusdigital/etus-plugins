@@ -1,0 +1,419 @@
+# ID Registry — Single Source of Truth for Document References
+# Use this file to control ALL ID sequences and maintain cross-references
+
+registry:
+  product: ""                           # Product name (ex: "Invoice Tracker", "ETS")
+  namespace: ""                         # Technical namespace (ex: "invoicing", "analytics")
+  owner: ""                             # Document owner (ex: "Product Team", "Engineering")
+  updated: ""                           # Last update date (YYYY-MM-DD)
+
+# Numeric sequences — increment as new items are added
+sequences:
+  act: 0                                # Actors in ideation (ACT-1, ACT-2, ...)
+  jtbd: 0                               # Jobs To Be Done (JTBD-1, JTBD-2, ...)
+  jour: 0                               # Journeys from ideation/design (JOUR-1, JOUR-2, ...)
+  uc: 0                                 # Use Cases (UC-1, UC-2, ...)
+  edge: 0                               # Edge Cases (EDGE-1, EDGE-2, ...)
+  asm: 0                                # Assumptions / open questions (ASM-1, ASM-2, ...)
+  bo: 0                                 # Business Objectives (BO-1, BO-2, ...)
+  fb: 0                                 # Feature Brief items (FB-1, FB-2, ...)
+  sol: 0                                # Solution directions (SOL-1, SOL-2, ...)
+  exp: 0                                # Discovery experiments (EXP-1, EXP-2, ...)
+  prd-f: 0                              # Product Features (PRD-F-1, PRD-F-2, ...)
+  us: 0                                 # User Stories (US-1, US-2, ...)
+  nfr: 0                                # Non-Functional Requirements (NFR-1, NFR-2, ...)
+  adr: 0                                # Architecture Decision Records (ADR-1, ADR-2, ...)
+  impl: 0                               # Implementation tasks (impl-1, impl-2, ...)
+  ng: 0                                  # Non-Goals (NG-1, NG-2, ...)
+  snap: 0                                # Story Snapshots (SNAP-1, SNAP-2, ...)
+  el: 0                                  # Elicitation Findings (EL-1, EL-2, ...)
+
+# ID rules — Documentation and Format
+rules:
+  act: |
+    ACT-# — Actors
+    Location: opportunity-pack.md
+    Format: ACT-1, ACT-2
+    Example: ACT-1 "Operations Manager"
+    Relationship: Upstream (problem space) / Downstream: JTBD-#, JOUR-#, UC-#, EDGE-#
+
+  jtbd: |
+    JTBD-# — Jobs To Be Done
+    Location: opportunity-pack.md
+    Format: JTBD-1, JTBD-2
+    Example: JTBD-1 "Upload customers in bulk without manual correction"
+    Relationship: Upstream: ACT-# / Downstream: FB-#, PRD-F-#, US-#
+
+  jour: |
+    JOUR-# — Journeys
+    Location: opportunity-pack.md (ideation) and user-journey.md (design)
+    Format: JOUR-1, JOUR-2
+    Example: JOUR-1 "Happy path bulk import"
+    Relationship: Upstream: ACT-#, JTBD-# / Downstream: UC-#, FB-#, US-#
+
+  uc: |
+    UC-# — Use Cases
+    Location: opportunity-pack.md
+    Format: UC-1, UC-2, UC-3
+    Example: UC-1 "Manager uploads a valid CSV and reviews preview"
+    Relationship: Upstream: ACT-#, JTBD-#, JOUR-# / Downstream: FB-#, PRD-F-#, US-#
+
+  edge: |
+    EDGE-# — Edge Cases / Failure Cases
+    Location: opportunity-pack.md
+    Format: EDGE-1, EDGE-2
+    Example: EDGE-1 "CSV upload exceeds file size limit"
+    Relationship: Upstream: UC-# / Downstream: FB-#, US-#, impl-#
+
+  asm: |
+    ASM-# — Assumptions / Open Questions
+    Location: opportunity-pack.md
+    Format: ASM-1, ASM-2
+    Example: ASM-1 "Users will prefer drag-and-drop over template download"
+    Relationship: Upstream: evidence gaps / Downstream: PRD, spike, implementation validation
+
+  bo: |
+    BO-# — Business Objectives
+    Location: product-vision.md
+    Format: BO-1, BO-2, BO-3
+    Example: BO-1 "Reduce invoicing time by 80%"
+    Relationship: Upstream (references nothing) / Downstream: PRD-F-#
+
+  fb: |
+    FB-# — Feature Brief Items
+    Location: features/{feature-slug}/feature-brief.md
+    Format: FB-1, FB-2, FB-3
+    Example: FB-1 "CSV upload and preview"
+    Relationship: Upstream: ACT-#, JTBD-#, JOUR-#, UC-#, EDGE-# / Downstream: US-#
+    Note: Feature mode bridge between ideation coverage and user stories
+
+  sol: |
+    SOL-# — Solution Directions
+    Location: planning/solution-discovery.md or features/{feature-slug}/solution-discovery.md
+    Format: SOL-1, SOL-2, SOL-3
+    Example: SOL-1 "Guided onboarding with progressive disclosure"
+    Relationship: Upstream: O-# / Downstream: PRD-F-# or FB-#
+    Note: Solution discovery chooses the direction before delivery requirements exist
+
+  exp: |
+    EXP-# — Discovery Experiments
+    Location: planning/solution-discovery.md, planning/solution-experiments.yaml, or features/{feature-slug}/solution-discovery.md
+    Format: EXP-1, EXP-2
+    Example: EXP-1 "Clickable prototype test with 5 target users"
+    Relationship: Upstream: SOL-# / Downstream: confidence in delivery decision
+    Note: Use when a solution needs validation before requirements
+
+  prd-f: |
+    PRD-F-# — Product Features (Product Requirements)
+    Location: prd.md
+    Format: PRD-F-1, PRD-F-2, PRD-F-3
+    Example: PRD-F-1 "Automatic invoice generator"
+    Relationship: Upstream: BO-# / Downstream: US-#
+    Note: Each feature must reference which BO-# it addresses
+
+  us: |
+    US-# — User Stories
+    Location: user-stories.md
+    Format: US-1, US-2, US-3
+    Example: US-1 "As a freelancer, I want to generate invoices automatically"
+    Relationship: Upstream: PRD-F-# / Downstream: FS-[kebab]-# (if complex)
+    Note: Each story must reference which PRD-F-# it implements
+
+  fs: |
+    FS-[kebab-name]-# — Feature Specifications
+    Location: feature-specs/feature-spec-[kebab-name].md
+    Format: FS-checkout-1, FS-checkout-2, FS-authentication-1
+    Example: FS-invoice-generation-1 "Invoice data validation"
+    Relationship: Upstream: US-# / Downstream: nothing (leaf node)
+    Rule: Create feature-spec ONLY if feature has >3 business rules
+    Note: [kebab-name] comes from feature name in kebab-case
+
+  nfr: |
+    NFR-# — Non-Functional Requirements
+    Location: tech-spec.md
+    Format: NFR-1, NFR-2, NFR-3
+    Example: NFR-1 "API response time < 200ms for 95th percentile"
+    Relationship: Upstream: (defined by PRD + tech decisions) / Downstream: nothing
+    Note: ALWAYS with quantified metric (not "fast", but "< 200ms")
+
+  adr: |
+    ADR-# — Architecture Decision Records
+    Location: tech-spec.md (section "Architecture Decisions")
+    Format: ADR-1, ADR-2, ADR-3
+    Example: ADR-1 "We chose Node.js instead of Python for API"
+    Relationship: Upstream: tech-stack choices / Downstream: nothing
+    Note: Document WHY each decision, not just WHAT
+
+  dict: |
+    dict.[domain].[field] — Data Dictionary Fields
+    Location: data-dictionary.md
+    Format: dict.invoice.total_amount, dict.user.email
+    Example: dict.invoice.total_amount "Total invoice amount in cents"
+    Relationship: Upstream: data-requirements.md / Downstream: database-spec.md (DDL)
+    Note: ONLY source of truth for field definitions
+
+  ev: |
+    ev.[domain].[action] — Event Catalog
+    Location: data-dictionary.md (section "Events")
+    Format: ev.invoice.created, ev.payment.completed
+    Example: ev.invoice.created "Event triggered when invoice is created"
+    Relationship: Upstream: user-stories.md (events triggered by features)
+    Note: ONLY source of truth for event definitions
+
+  tok: |
+    tok.[category].[name] — Design Tokens
+    Location: style-guide.md
+    Format: tok.color.primary, tok.spacing.md, tok.typography.body
+    Example: tok.color.primary "#6366F1"
+    Relationship: Upstream: (design choices) / Downstream: wireframes.md
+    Note: ONLY source of truth for design tokens
+
+  impl: |
+    impl-# — Implementation Tasks
+    Location: implementation-plan.md (source) + state/execution-status.yaml (optional projection)
+    Format: impl-1, impl-2, impl-3
+    Example: impl-1 "Implement API /invoices POST endpoint"
+    Relationship: Upstream: feature-specs + user-stories / Downstream: nothing
+    Note: Break features into tasks, each task has owner + sprint
+
+  ng: |
+    NG-# — Non-Goals
+    Location: opportunity-pack.md, features/{feature-slug}/feature-brief.md
+    Format: NG-1, NG-2, NG-3
+    Example: NG-1 "Must NOT auto-delete user data without explicit consent"
+    Relationship: Upstream: problem space / Downstream: check-traceability (violation detection)
+    Note: Used to track what must NOT happen. Traced by check-traceability for violation detection.
+
+  snap: |
+    SNAP-# — Story Snapshots
+    Location: opportunity-pack.md (ideation interview stories)
+    Format: SNAP-1, SNAP-2, SNAP-3
+    Example: SNAP-1 "User described frustration with manual CSV cleanup every Monday"
+    Relationship: Upstream: stakeholder interviews / Downstream: JTBD-#, JOUR-#, ASM-#
+    Note: Generated after each extracted interview story during ideation.
+
+  el: |
+    EL-# — Elicitation Findings
+    Location: elicitation report (generated by /elicit command)
+    Format: EL-A-# (ambiguities), EL-C-# (contradictions), EL-B-# (missing boundaries), EL-H-# (hidden assumptions), EL-E-# (unresolved edges), EL-D-# (developer questions)
+    Example: EL-A-1 "PRD says 'fast response' but no NFR defines target latency"
+    Relationship: Upstream: any document set / Downstream: document revisions, spike
+    Note: Categories — A: ambiguities, C: contradictions, B: missing boundaries, H: hidden assumptions, E: unresolved edges, D: developer questions.
+
+# Traceability Chain — Required Cross-References
+traceability:
+  ideation:
+    documents:
+      - opportunity-pack.md (ACT-#, JTBD-#, JOUR-#, UC-#, EDGE-#, ASM-#)
+      - state/coverage-matrix.yaml (coverage and readiness status)
+    rules:
+      - JTBD-# MUST reference an ACT-#
+      - JOUR-# MUST reference an ACT-# and SHOULD connect to JTBD-#
+      - UC-# MUST connect actor + trigger + expected result
+      - EDGE-# MUST connect to a journey or use case
+      - ASM-# MUST be marked resolved, assumed, or open
+
+  discovery:
+    documents:
+      - opportunity-pack.md (source for discovery synthesis)
+      - project-context.md (5W2H)
+      - product-vision.md (BO-1 through BO-N)
+
+  planning:
+    documents:
+      - ost.md (O-# references outcome)
+      - prioritization.md (selected O-# ranking)
+      - planning/solution-discovery.md or features/{feature-slug}/solution-discovery.md (SOL-# references O-# when applicable)
+      - prd.md (PRD-F-1 references BO-#)
+      - user-stories.md (US-1 references PRD-F-#)
+      - features/{feature-slug}/feature-brief.md (FB-# references ideation coverage in Feature mode)
+      - feature-specs/ (FS-[kebab]-# references US-#, optional)
+    rules:
+      - O-# MUST feed at least one SOL-# or be explicitly deprioritized
+      - SOL-# MUST feed PRD-F-# or FB-#
+      - Feature mode MUST maintain ACT/JTBD/JOUR/UC/EDGE -> FB-# -> US-# linkage
+      - PRD-F-# MUST reference which BO-# it addresses
+      - US-# MUST reference which PRD-F-# it implements
+      - FS-[kebab]-# MUST reference which US-# it details
+
+  design:
+    documents:
+      - tech-spec.md (NFR-#, ADR-#)
+      - data-dictionary.md (dict.*, ev.*)
+      - database-spec.md (references dict.*)
+      - api-spec.md (schemas reference dict.*)
+      - style-guide.md (tok.*)
+      - wireframes.md (references tok.*)
+    rules:
+      - NFR-# references nothing upstream (is design baseline)
+      - dict.* MUST be referenced in database-spec.md DDL
+      - ev.* MUST be documented in data-dictionary.md
+      - tok.* MUST be used in wireframes.md
+
+  implementation:
+    documents:
+      - implementation-plan.md (impl-1 references US-# or FS-#)
+      - quality-checklist.md (references US-# acceptance criteria)
+      - release-plan.md (rollout, rollback, monitoring)
+    rules:
+      - impl-# MUST trace back to user-story
+      - Execution adapter state is optional and never overrides implementation-plan.md
+
+# Checklist: Before Considering a Document "Ready"
+checklist:
+  ideation:
+    - "[ ] Does opportunity-pack.md define the problem separately from the proposed solution?"
+    - "[ ] Is there at least 1 ACT-#?"
+    - "[ ] Is there at least 1 JTBD-#?"
+    - "[ ] Is there at least 1 JOUR-#?"
+    - "[ ] Is there at least 1 UC-#?"
+    - "[ ] Is there at least 1 EDGE-#?"
+    - "[ ] Are guardrails and blocking questions explicit?"
+    - "[ ] Does coverage-matrix.yaml show threshold status for the mode?"
+
+  discovery:
+    - "[ ] Was project-context.md derived from opportunity-pack.md?"
+    - "[ ] Does project-context.md have complete 5W2H?"
+    - "[ ] Does product-vision.md have vision + mission + values?"
+    - "[ ] Is the problem clear and validated?"
+    - "[ ] Is the opportunity quantified?"
+    - "[ ] Is any BO-# orphaned (not referenced in vision)?"
+
+  planning:
+    - "[ ] Does each selected O-# have at least one SOL-#?"
+    - "[ ] Does each SOL-# feed PRD-F-# or FB-#?"
+    - "[ ] Do Feature mode artifacts maintain ACT/JTBD/JOUR/UC/EDGE linkage?"
+    - "[ ] Does each PRD-F-# reference a BO-#?"
+    - "[ ] Does each US-# reference a PRD-F-#?"
+    - "[ ] Do complex features have FS-[kebab]-#?"
+    - "[ ] Does each FS-# reference a US-#?"
+    - "[ ] Is any US-# orphaned (not in PRD-F-#)?"
+
+  design:
+    - "[ ] Does tech-spec have quantified NFR-#?"
+    - "[ ] Does tech-spec have justified ADR-#?"
+    - "[ ] Does data-dictionary have dict.* for every field in ER?"
+    - "[ ] Does data-dictionary have ev.* for every event?"
+    - "[ ] Does database-spec reference dict.* in DDL?"
+    - "[ ] Does api-spec reference dict.* in schemas?"
+    - "[ ] Does style-guide have tok.* for colors, spacing, typography?"
+    - "[ ] Do wireframes use tok.* references?"
+    - "[ ] Is any token, event or field orphaned?"
+
+  implementation:
+    - "[ ] Do impl-# tasks trace back to US-# or FS-#?"
+    - "[ ] Does quality-checklist reference acceptance criteria from US-#?"
+    - "[ ] Is any impl-# orphaned (missing upstream story or spec)?"
+
+# Single Source of Truth (SST) Enforcement
+sst_rules:
+  acceptance_criteria_only_in: user-stories.md
+  ideation_actors_only_in: opportunity-pack.md
+  discovery_jtbd_only_in: opportunity-pack.md
+  ideation_journey_inventory_only_in: opportunity-pack.md
+  use_case_matrix_only_in: opportunity-pack.md
+  edge_case_register_only_in: opportunity-pack.md
+  assumption_register_only_in: opportunity-pack.md
+  solution_options_only_in: solution-discovery.md
+  experiment_definitions_only_in: solution-discovery.md
+  nfr_definitions_only_in: tech-spec.md
+  field_definitions_only_in: data-dictionary.md
+  event_definitions_only_in: data-dictionary.md
+  design_tokens_only_in: style-guide.md
+  ddl_statements_only_in: database-spec.md
+  api_schemas_only_in: api-spec.md
+  architecture_decisions_only_in: tech-spec.md
+
+  warning: |
+    If you find "JTBD-" defined outside opportunity-pack.md -> ERROR (must move)
+    If you find "UC-" defined outside opportunity-pack.md -> ERROR (must move)
+    If you find "EDGE-" defined outside opportunity-pack.md -> ERROR (must move)
+    If you find "Given/When/Then" outside user-stories.md → ERROR (must move)
+    If you find "NFR-" defined outside tech-spec.md → ERROR (must move)
+    If you find "CREATE TABLE" outside database-spec.md → ERROR (must move)
+    If you find "tok." defined outside style-guide.md → ERROR (must move)
+
+# Versioning (When Iterating Documents)
+versioning:
+  discovery:
+    v1: "Initial (5W2H + vision)"
+    v2: "Refine after feedback (ITERATE gate)"
+    note: "Each version generates new gate report"
+
+  planning:
+    v1: "Initial (PRD + stories)"
+    v2: "After feedback (ITERATE gate)"
+    v3: "Descoped (DESCOPE gate — remove Could features)"
+    note: "Keep history of which features were descoped"
+
+  design:
+    v1: "Initial (architecture + parallel design)"
+    v2: "After feedback (ITERATE gate)"
+    v3: "Major redesign (REDESIGN gate — back to 3a)"
+    note: "If REDESIGN, run Phase 3a + 3b again"
+
+  implementation:
+    v1: "Sprint 1"
+    v2: "Sprint 2"
+    vN: "Sprint N"
+    note: "Execution adapter state is optional and versioned separately from the documentation core"
+
+---
+
+# How to Use This File
+
+## 1. Initialize New Project
+
+```bash
+# When starting a new project:
+1. Copy ids.yml to project root
+2. Update registry:
+   - product: "your-product"
+   - namespace: "your-namespace"
+   - owner: "your-name"
+   - updated: "2026-03-14"
+3. Start with sequences zeroed
+4. As you create docs, increment sequences
+```
+
+## 2. During Discovery
+
+```bash
+# Generate BO-1, BO-2, etc. in product-vision.md
+registry.sequences.bo: 1, 2, 3, ...
+```
+
+## 3. During Planning
+
+```bash
+# Generate PRD-F-1, US-1, FS-[kebab]-1, etc.
+registry.sequences.prd-f: 1, 2, 3, ...
+registry.sequences.us: 1, 2, 3, ...
+# FS-[kebab]-# is INDEPENDENT per feature (can reset per feature)
+```
+
+## 4. Before Each Gate
+
+```bash
+# Use the checklist corresponding to the phase
+# If any item is [ ], do not pass the gate
+# If all are [x], you are ready to advance
+```
+
+## 5. Continuous Validation
+
+```bash
+# Hooks (post-document-save.sh) will check:
+- No "Given/When/Then" outside user-stories.md
+- No "NFR-" defined outside tech-spec.md
+- No "dict." defined outside data-dictionary.md
+- No "ev." defined outside data-dictionary.md
+- No "tok." defined outside style-guide.md
+- No "CREATE TABLE" outside database-spec.md
+```
+
+---
+
+**Version:** 1.2 (2026-03-24)
+**Purpose:** Template to initialize new project
+**Status:** Ready for use

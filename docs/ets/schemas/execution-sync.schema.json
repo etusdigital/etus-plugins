@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aabrius.github.io/etus/schemas/execution-sync.schema.json",
+  "title": "ETUS Execution Sync",
+  "type": "object",
+  "required": ["schema", "execution_adapter", "source_of_truth"],
+  "properties": {
+    "schema": { "const": "etus/execution-sync@v1" },
+    "execution_adapter": { "enum": ["local", "linear"] },
+    "workspace": { "type": "string" },
+    "team": { "type": "string" },
+    "precedence": { "enum": ["documentation_core_wins", "external_execution_wins"] },
+    "sync_direction": { "enum": ["read_only_from_external", "bidirectional"] },
+    "source_of_truth": {
+      "type": "object",
+      "properties": {
+        "documentation_core": { "enum": ["local"] },
+        "execution_projection": { "enum": ["local", "linear"] }
+      },
+      "additionalProperties": false
+    },
+    "last_sync_at": { "type": "string" },
+    "sync_status": { "enum": ["healthy", "degraded", "blocked"] },
+    "external_units": { "type": "object", "additionalProperties": true },
+    "projection": { "type": "object", "additionalProperties": true },
+    "mappings": { "type": "object", "additionalProperties": true },
+    "conflicts": { "type": "array", "items": { "type": "object", "additionalProperties": true } },
+    "runs": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+  },
+  "additionalProperties": true
+}

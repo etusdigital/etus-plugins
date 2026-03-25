@@ -1,0 +1,114 @@
+# Coverage Matrix Template
+# Source of truth for ideation coverage before planning/design.
+# Interview execution state is tracked separately in elicitation-state.yaml.
+
+meta:
+  mode: product
+  status: draft
+  source_artifact: docs/ets/projects/{project-slug}/discovery/opportunity-pack.md
+  thresholds:
+    actors: 0
+    jtbd: 0
+    journeys: 0
+    use_cases: 0
+    edge_cases: 0
+    assumptions: 0
+
+coverage:
+  actors:
+    threshold: 0
+    count: 0
+    items:
+      - id: ACT-1
+        label: ""
+        status: not_started
+        downstream: []
+
+  jtbd:
+    threshold: 0
+    count: 0
+    items:
+      - id: JTBD-1
+        actor: ACT-1
+        type: functional
+        status: not_started
+        downstream: []
+
+  journeys:
+    threshold: 0
+    count: 0
+    items:
+      - id: JOUR-1
+        actor: ACT-1
+        path_type: happy
+        status: not_started
+        downstream: []
+
+  use_cases:
+    threshold: 0
+    count: 0
+    items:
+      - id: UC-1
+        actor: ACT-1
+        status: not_started
+        downstream: []
+
+  edge_cases:
+    threshold: 0
+    count: 0
+    items:
+      - id: EDGE-1
+        severity: medium
+        status: not_started
+        downstream: []
+
+  assumptions:
+    threshold: 0
+    count: 0
+    items:
+      - id: ASM-1
+        status: not_started
+        downstream: []
+
+semantic_dimensions:
+  # Mandatory dimensions — all must be "covered" for readiness gate
+  problem_independent_of_solution: missing
+  actor_roles_and_permissions: missing
+  trigger_and_preconditions: missing
+  core_behavior_described: missing
+  success_signal_defined: missing
+  explicit_non_goals: missing
+  failure_modes_covered: missing
+  data_mutations_identified: missing
+  # Recommended dimensions — should be covered but do not block gate
+  degraded_behavior: missing
+  side_effects_and_notifications: missing
+  observability_needs: missing
+  # Archetype-specific dimensions (populated dynamically per project)
+  archetype_dimensions: {}
+
+# mandatory_dimensions: derived at runtime from MODE_DIMENSION_RULES in state_defaults.py
+# Do NOT maintain a static list here — the mode (product/feature/bug/spike) determines
+# which dimensions are required. See state_defaults.py MODE_DIMENSION_RULES.
+
+edge_resolution:
+  # Format: EDGE-1: { status: unresolved, gap: "description" }
+
+readiness_gate:
+  problem_defined: false
+  actors_identified: false
+  jtbd_covered: false
+  journeys_covered: false
+  use_cases_covered: false
+  edge_cases_covered: false
+  guardrails_defined: false
+  blocking_questions_explicit: false
+  all_mandatory_dimensions_covered: false
+  all_edges_resolved_or_deferred: false
+  recommendation: iterate
+
+blocking_questions: []
+pending_items: []
+assumed_items: []
+blockers: []
+notes: []

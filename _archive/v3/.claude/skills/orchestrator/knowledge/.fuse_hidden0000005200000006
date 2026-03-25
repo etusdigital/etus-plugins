@@ -1,0 +1,73 @@
+---
+doc_meta:
+  id: checks
+  display_name: Checklist Library
+  pillar: Operate
+  owner_role: Enablement Lead
+  summary: Maintains reusable readiness, QA, and review checklists for the documentation
+    flow.
+  order: 0.9
+  gate: meta
+  requires: []
+  optional: []
+  feeds: []
+uuid: <UUID>
+version: 1.0.0
+status: Guide
+owners:
+- <owners>
+product: <product>
+namespace: <namespace>
+created: <YYYY-MM-DD>
+last_updated: <YYYY-MM-DD>
+tags:
+- Checklists
+- Gates
+- ETUS
+ai_template_variables:
+- product
+- owner
+- namespace
+---
+
+# Checklists — Gates & Roles
+
+**Recommended path:** `docs/meta/checklists.md`
+
+---
+
+## A) Discover Gate (Vision/JTBD/Journey/BRD)
+
+- [ ] Problem Statement sem solução embutida
+- [ ] HMW + 5W2H com números
+- [ ] CSD priorizada + **kill criteria** por suposição
+- [ ] JTBD com outcomes mensuráveis
+- [ ] Journey por etapa: métricas + happy/alt/error
+- [ ] BRD: BO‑# baseline→target→timeline
+
+## B) Define Gate (PRD/Epics/US/FRD)
+
+- [ ] PRD‑F com Success Criteria + out‑of‑scope
+- [ ] Epics: DoR, Kill, métrica e dependências
+- [ ] US: ≥3 cenários (Happy/Alt/Error) + DoD
+- [ ] FRD: fluxos, regras, estados, erros
+
+## C) Develop Gate (SRS/Arch/Tech)
+
+- [ ] SRS: NFR‑# com alvo + verificação + owner
+- [ ] Arquitetura: C4 + deployment + integrações
+- [ ] Tech Spec: ADRs, táticas p/ SRS, runbooks
+
+## D) Deliver Gate (BE/FE/Data/UX)
+
+- [ ] BE: auth, envelope de erro, versionamento, observabilidade
+- [ ] FE: rotas/guards, estados, telemetria, a11y perf goals
+- [ ] Data: dicionário `dict.*`, eventos `ev.*`, DFD, retenção
+- [ ] UX: UXSM, wireframes, padrões UXDD, style tokens
+
+## E) Release Checklist
+
+- [ ] Flags e rollout plan
+- [ ] KPIs/dashboards de sucesso
+- [ ] Runbooks e SLOs armados
+- [ ] Comunicação e treinamento

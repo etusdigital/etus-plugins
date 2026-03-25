@@ -1,0 +1,23 @@
+schema: etus/workflow-state@v1
+project_slug: ""
+gates:
+  ideation_readiness: pending
+  discovery_gate: pending
+  opportunity_focus_gate: pending
+  solution_readiness_gate: pending
+  requirements_gate: pending
+  implementation_readiness_gate: pending
+phase_status:
+  ideate: not_started
+  discovery: not_started
+  opportunities: not_started
+  solution: not_started
+  requirements: not_started
+  design: not_started
+  implementation: not_started
+  release: not_started
+  retrospective: not_started
+reports: {}
+current_step: ideate
+last_completed_step: ""
+next_recommended_step: /ideate

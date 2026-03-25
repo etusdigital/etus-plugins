@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-document-save.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/memory-sync.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

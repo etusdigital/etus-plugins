@@ -1,0 +1,18 @@
+schema: etus/execution-sync@v1
+execution_adapter: linear
+workspace: ""
+team: ""
+precedence: documentation_core_wins
+sync_direction: bidirectional
+source_of_truth:
+  documentation_core: local
+  execution_projection: linear
+last_sync_at: ""
+sync_status: healthy
+external_units: {}
+projection:
+  stories: {}
+  tasks: {}
+mappings: {}
+conflicts: []
+runs: []

@@ -1,0 +1,1428 @@
+---
+name: orchestrator
+description: Orchestrate the complete solo developer workflow across all 6 chains (feature-development, ux, architecture, data, api-backend) with gate validation, parallel execution management, and Double Diamond phase enforcement. Use when generating complete product documentation from vision to implementation specs.
+---
+
+# Orchestrator
+
+Coordinate the complete solo developer documentation workflow across all document generation chains with systematic gate validation and parallel workstream management.
+
+## Purpose
+
+This skill orchestrates the entire product development documentation workflow by:
+
+1. **Managing Chain Execution** - Coordinate 5 specialized chain skills in proper sequence
+2. **Enforcing Gates** - Validate Discover, Define, Develop, Deliver, Release gates using 5W2H
+3. **Parallel Execution** - Launch Data, UX, and Backend chains in parallel during Deliver phase
+4. **Dependency Validation** - Ensure prerequisite documents exist before dependent chains run
+5. **Quality Assurance** - Verify traceability, completeness, and Single Source of Truth compliance
+6. **Double Diamond Enforcement** - Ensure proper convergence/divergence at phase transitions
+
+The orchestrator is the "conductor" that ensures all 38 template files (25 core + 13 supporting) are generated in the correct order with complete traceability.
+
+## Interactive Gate Reviews
+
+**All gates in this orchestration workflow are COLLABORATIVE REVIEWS, not automatic checks.**
+
+Gate validation is a conversation with the user to decide together whether to:
+- **GO** - Proceed to next phase (requirements met, confidence high)
+- **NO-GO** - Stop project (doesn't make business/technical sense)
+- **ITERATE** - Refine current phase (gaps identified, need more work)
+
+**Key Principle:** Gates are decision points, not checkboxes. The user must explicitly approve proceeding to each phase.
+
+**Do NOT:**
+- Automatically pass gates without user review
+- Generate all documents without pausing at gates
+- Skip validation conversations
+- Proceed without explicit GO decision from user
+- Ignore gate failures and continue anyway
+
+**Success Criteria:** User actively participates in gate reviews and makes informed GO/NO-GO/ITERATE decisions at each phase transition.
+
+## When to Use This Skill
+
+Use this skill when:
+- Starting a new product and need complete documentation set
+- Want to generate all documents from vision through implementation specs
+- Need to ensure proper workflow sequence and gate validation
+- Managing complex documentation with parallel workstreams
+- Validating completeness of existing documentation set
+
+Do NOT use for:
+- Generating individual documents (use specific chain skills instead)
+- Updating existing documents (use chain skills directly)
+- Learning about specific templates (read template files directly)
+
+**Dependencies:** This skill invokes all 5 chain skills in orchestrated sequence.
+
+## Methodology Integration
+
+### Double Diamond Orchestration
+
+The orchestrator enforces the complete Double Diamond across all chains:
+
+```
+DISCOVER          DEFINE          DEVELOP          DELIVER
+(Diverge)       (Converge)      (Diverge)       (Converge)
+
+feature-dev    → feature-dev →   architecture  →    converge
+                                      ↓               at fe
+                                   data ──────→
+                                      ↓
+                                   ux ────────→
+                                      ↓
+                                   api-backend →
+```
+
+**Phase Transitions Enforced:**
+- Discover → Define: Problem validated, business case approved
+- Define → Develop: Requirements complete, ready for technical design
+- Develop → Deliver: Architecture defined, ready for parallel implementation
+- Deliver → Release: Frontend convergence point reached, implementation ready
+
+### 5W2H Gate Validation
+
+Apply systematic questioning at each gate to ensure completeness:
+
+**Gate Validation Questions:**
+
+**WHAT:**
+- What artifacts are required for this gate?
+- What quality criteria must be met?
+- What dependencies must be satisfied?
+
+**WHO:**
+- Who owns each deliverable?
+- Who validates gate passage?
+- Who is blocked if gate fails?
+
+**WHERE:**
+- Where are the required documents?
+- Where are quality gaps?
+- Where are dependency conflicts?
+
+**WHEN:**
+- When can we proceed to next phase?
+- When must gate be passed (deadline)?
+- When were artifacts last validated?
+
+**WHY:**
+- Why is this gate necessary?
+- Why might we fail this gate?
+- Why are specific criteria important?
+
+**HOW:**
+- How do we validate completeness?
+- How do we verify quality?
+- How do we resolve gate failures?
+
+**HOW MUCH:**
+- How much work remains before gate?
+- How much risk in proceeding?
+- How much rework if we skip validation?
+
+### How Might We for Gate Failures
+
+Transform gate blockers into opportunities:
+
+**Example Transformations:**
+
+```
+Blocker: NFRs not quantified, can't pass Develop gate
+↓
+HMW: How might we quickly quantify NFRs using existing data?
+↓
+Solution: Reference industry benchmarks, competitor analysis, user research data
+```
+
+```
+Blocker: Parallel workstreams have conflicting assumptions
+↓
+HMW: How might we align assumptions without blocking parallel work?
+↓
+Solution: Async architecture review, shared data dictionary as single source
+```
+
+```
+Blocker: Frontend convergence missing backend API contracts
+↓
+HMW: How might we unblock frontend while backend APIs finalize?
+↓
+Solution: Generate mock API contracts from FRD, iterate on contracts separately
+```
+
+## Workflow Orchestration
+
+### Sequential Execution (Phases 1-3)
+
+**Phase 1: DISCOVER (Divergent)**
+
+```
+feature-development-chain (vis → brd)
+↓
+DISCOVER GATE VALIDATION
+✓ One-line vision statement clear
+✓ 5W2H analysis complete
+✓ North Star Metric: baseline → target → window
+✓ 3-5 Critical Success Drivers defined
+✓ Kill criteria documented
+✓ BRD: BO-# IDs with targets and timelines
+✓ ROI justification credible
+✓ Risks identified, mitigation planned
+```
+
+**Decision:** GO (proceed to Define) | NO-GO (kill project) | ITERATE (refine discovery)
+
+**Phase 2: DEFINE (Convergent)**
+
+```
+feature-development-chain (prd → epic → stor → frd)
+↓
+DEFINE GATE VALIDATION
+✓ Every PRD Must feature (PRD-F-#) has ≥1 epic
+✓ Every epic has ≥3 user stories
+✓ Every P0 story has ≥3 scenarios (Happy/Alt/Error)
+✓ Every story has DoR met, DoD defined
+✓ FRD decomposes all PRD-F-# features into FR-# items with inputs, outputs, business rules
+✓ All FR-# link to related US-# stories
+✓ No acceptance criteria in FRD (only in User Stories with Given/When/Then)
+✓ 0 undefined TBD items in P0 scope
+✓ All FR-# trace to PRD-F-# features
+✓ Complete traceability: vis → BO-# → PRD-F-# → FR-# → US-#
+```
+
+**Decision:** GO (proceed to Develop) | DESCOPE (remove Should/Could) | ITERATE (clarify requirements)
+
+**Phase 3: DEVELOP (Divergent) - Architecture First**
+
+```
+architecture-chain (srs → arch → tech)
+↓
+DEVELOP GATE VALIDATION
+✓ Every NFR has: target, verification, owner, threshold
+✓ NFRs cover: performance, scalability, security, reliability, maintainability, usability
+✓ 5W2H analysis for key NFRs
+✓ Architecture: C4 levels (Context, Container, Component)
+✓ Architecture supports all NFR-# requirements
+✓ ADRs document decisions with alternatives
+✓ Implementation tactics for each P0 NFR
+✓ Validation plan exists for testing NFRs
+✓ No architectural debt in critical path
+✓ HMW statements for constraints
+```
+
+**Decision:** GO (start parallel workstreams) | REDESIGN (architecture inadequate) | ITERATE (refine NFRs/tactics)
+
+### Parallel Execution (Phase 4)
+
+**Phase 4: DELIVER (Parallel Workstreams)**
+
+Launch THREE chains in parallel:
+
+**Workstream A: Data Chain**
+```
+data-chain (data → erd → db → sql → dict → flow → cat)
+
+Data Track Gate:
+✓ All entities defined with 5W2H analysis
+✓ ERD complete with relationships
+✓ Database constraints documented
+✓ DDL in database-schema.md (Single Source)
+✓ Data dictionary: dict.* and ev.* defined
+✓ Data flows mapped
+✓ Data catalog for governance
+```
+
+**Workstream B: UX Chain**
+```
+ux-chain (per → jour → uxs → ux → des → wire → sty → fe)
+
+UX Track Gate:
+✓ JTBD documented
+✓ Journey maps with pain points
+✓ HMW statements for opportunities
+✓ Sitemap complete
+✓ UX patterns with rationale
+✓ Components specified (states, a11y)
+✓ Wireframes for all screens/breakpoints
+✓ Style guide: ALL tok.* tokens (Single Source)
+✓ Frontend specs: routing, state, telemetry, a11y
+```
+
+**Workstream C: Backend Chain**
+```
+api-backend (be)
+
+Backend Track Gate:
+✓ All API endpoints documented
+✓ 5W2H analysis for critical endpoints
+✓ Request/response schemas defined
+✓ Authentication/authorization specified
+✓ Error handling envelope
+✓ API versioning strategy
+✓ Rate limiting policies
+✓ Observability standards
+```
+
+**Convergence Point: Frontend Requirements (fe)**
+
+Frontend (fe) is the FINAL convergence requiring:
+- UX outputs: jour, wire, ux, des, sty
+- Backend outputs: be (API contracts)
+- Data outputs: dict (field definitions, ev.* events)
+
+**DELIVER GATE VALIDATION (Convergence)**
+```
+✓ All three parallel tracks complete
+✓ Frontend references: be APIs + dict fields + tok.* tokens
+✓ No conflicting assumptions between tracks
+✓ Traceability maintained: frd → nfr/us → components/endpoints/entities
+✓ Single Source of Truth respected: no duplicate definitions
+✓ Cross-document IDs validated
+```
+
+**Decision:** GO (proceed to Release) | ITERATE (resolve conflicts) | BLOCK (one track incomplete)
+
+### Release Preparation (Phase 5)
+
+**Phase 5: RELEASE**
+
+```
+Validate complete documentation set:
+✓ All 25 core templates generated
+✓ Supporting files as needed (checklists, story files)
+✓ No broken ID references
+✓ No overlapping definitions
+✓ Traceability chains complete
+✓ All gates passed
+```
+
+**RELEASE GATE VALIDATION**
+```
+WHAT: All required artifacts complete
+WHO: All owners identified and accountable
+WHERE: All templates in proper locations
+WHEN: Timeline validated, no blocking TBDs
+WHY: Rationale documented for decisions
+HOW: Implementation approach clear
+HOW MUCH: Scope, budget, effort estimated
+```
+
+**Decision:** GO (start implementation) | ITERATE (fix gaps) | ESCALATE (major issues)
+
+## Chain Skill Invocation
+
+### Feature Development Chain
+
+**Invoke When:** Starting Discover phase or Define phase
+
+**Input Required:**
+- Problem statement (user input)
+- Business context
+- Target users
+
+**Output Generated:**
+- vis (Product Vision)
+- brief (optional Product Brief)
+- brd (Business Requirements)
+- prd (Product Requirements with PRD-F-# features)
+- epic (Epics)
+- stor (User Stories)
+- frd (Feature Requirements - decomposes PRD-F-# into FR-# items)
+
+**Validation After Completion:**
+- Discover Gate passed (after brd)
+- Define Gate passed (after frd)
+- Complete traceability: vis → BO-# → PRD-F-# → EP-# → US-# → FR-#
+
+### Architecture Chain
+
+**Invoke When:** Define gate passed, entering Develop phase
+
+**Input Required:**
+- frd (Feature Requirements - FR-# items) from feature-development-chain
+
+**Output Generated:**
+- srs (Software Requirements Spec with NFRs)
+- arch (Architecture Diagram - C4 model)
+- tech (Technical Spec with ADRs)
+
+**Validation After Completion:**
+- Develop Gate passed
+- Every NFR-# has: target, verification, owner, acceptance threshold
+- Architecture supports all NFR-# requirements
+- ADRs document major decisions
+
+### Data Chain
+
+**Invoke When:** Develop gate passed, parallel workstream A
+
+**Input Required:**
+- frd (Feature Requirements with FR-# items)
+- srs (Software Requirements) for NFRs
+
+**Output Generated:**
+- data (Data Requirements Document)
+- erd (Entity Relationship Diagram)
+- db (Database Requirements Document)
+- sql (Database Schema - DDL single source)
+- dict (Data Dictionary - dict.* and ev.* single source)
+- flow (Data Flow Diagram)
+- cat (Data Catalog)
+
+**Validation After Completion:**
+- Data Track Gate passed
+- All dict.* fields defined (Single Source)
+- All ev.* events defined (Single Source)
+- DDL complete in database-schema.md
+
+### UX Chain
+
+**Invoke When:** Develop gate passed, parallel workstream B
+
+**Input Required:**
+- prd (Product Requirements with PRD-F-# features)
+- frd (Feature Requirements with FR-# items)
+
+**Output Generated:**
+- per (Jobs To Be Done)
+- jour (User Journey)
+- uxs (UX Sitemap - routes and views)
+- ux (UX Design Doc)
+- des (Design Requirements)
+- wire (Wireframes)
+- sty (Style Guide - tok.* single source)
+- fe (Frontend Requirements)
+
+**Validation After Completion:**
+- UX Track Gate passed
+- All tok.* tokens defined (Single Source)
+- Sitemap complete
+- Wireframes cover all breakpoints
+- Frontend specs reference: be + dict + tok.*
+
+### API Backend
+
+**Invoke When:** Develop gate passed, parallel workstream C
+
+**Input Required:**
+- frd (Feature Requirements with FR-# items)
+- srs (Software Requirements) for NFRs
+
+**Output Generated:**
+- be (Backend Requirements - comprehensive API spec)
+
+**Validation After Completion:**
+- Backend Track Gate passed
+- All API endpoints documented
+- Authentication/authorization specified
+- Error handling envelope defined
+- Observability standards set
+
+## Dependency Management
+
+### Critical Dependency Rules
+
+**Must Complete Before Starting:**
+
+1. **feature-development-chain MUST complete before:**
+   - architecture-chain (requires frd)
+   - data-chain (requires frd)
+   - ux-chain (requires prd, frd)
+   - api-backend (requires frd)
+
+2. **architecture-chain MUST complete before:**
+   - data-chain (requires srs for NFRs)
+   - api-backend (requires srs for NFRs)
+
+3. **Parallel workstreams (Data, UX, Backend) can start simultaneously IF:**
+   - feature-development-chain complete
+   - architecture-chain complete
+   - No conflicting assumptions identified
+
+4. **Frontend (fe) MUST wait for:**
+   - UX chain complete (needs tok.* tokens)
+   - Backend complete (needs be API contracts)
+   - Data chain complete (needs dict.* fields and ev.* events)
+
+### Dependency Validation Checks
+
+Before launching any chain:
+
+```
+DEPENDENCY CHECK (5W2H):
+
+WHAT dependencies required?
+- List all required upstream documents
+- Verify each document exists
+
+WHO provides dependencies?
+- Identify which chains produce required outputs
+- Verify those chains completed successfully
+
+WHERE are dependency gaps?
+- Check for missing documents
+- Identify incomplete sections
+
+WHEN can we proceed?
+- Validate all prerequisites met
+- Check gate criteria passed
+
+WHY are dependencies critical?
+- Document rationale for dependencies
+- Identify blocking vs nice-to-have
+
+HOW do we resolve missing dependencies?
+- Re-run upstream chains
+- Generate missing documents
+- Adjust scope if needed
+
+HOW MUCH risk without dependency?
+- Assess impact of proceeding
+- Document assumptions if blocked
+```
+
+## Quality Assurance
+
+### Traceability Validation
+
+After all chains complete, validate complete traceability:
+
+**Traceability Chains to Verify:**
+
+1. **Problem → Solution:**
+   - vis (vision) → BO-# (business objectives)
+   - BO-# → PRD-F-# (product features)
+   - PRD-F-# → EP-# (epics)
+
+2. **Requirements → Implementation:**
+   - EP-# → US-# (user stories)
+   - US-# → FR-# (functional requirements)
+   - FR-# → NFR-# (non-functional requirements)
+
+3. **Architecture → Components:**
+   - NFR-# → architecture patterns (arch)
+   - NFR-# → implementation tactics (tech)
+   - arch → ADR-# (architecture decisions)
+
+4. **Data Traceability:**
+   - FR-# → entities (erd)
+   - entities → tables (sql)
+   - tables → dict.* (data dictionary)
+   - FR-# → ev.* (events in data dictionary)
+
+5. **UX Traceability:**
+   - US-# → screens (wire)
+   - screens → components (des)
+   - components → tok.* (style guide)
+   - US-# → frontend features (fe)
+
+6. **API Traceability:**
+   - FR-# → API endpoints (be)
+   - API endpoints → request/response schemas (be)
+   - be → fe (frontend references backend APIs)
+
+**Validation Method:**
+- Generate traceability matrix
+- Check for orphaned IDs (not linked upstream)
+- Verify bidirectional references
+- Validate no broken links
+
+### Single Source of Truth Validation
+
+Ensure no duplicate definitions across documents:
+
+**Single Sources to Enforce:**
+
+1. **Given/When/Then** → ONLY in User Stories (stor)
+   - Other docs reference us-# IDs
+   - No acceptance criteria restated elsewhere
+
+2. **NFR Targets** → ONLY in SRS (srs)
+   - Other docs reference nfr-# IDs
+   - No numeric targets restated
+
+3. **API Schemas** → ONLY in Backend Requirements (be)
+   - Frontend references be endpoints
+   - No request/response duplicated
+
+4. **Design Tokens** → ONLY in Style Guide (sty)
+   - Other docs reference tok.* IDs
+   - No color/spacing/typography redefined
+
+5. **Field Definitions** → ONLY in Data Dictionary (dict)
+   - Other docs reference dict.* fields
+   - No field semantics duplicated
+
+6. **Event Definitions** → ONLY in Data Dictionary (dict)
+   - Other docs reference ev.* events
+   - No event schemas duplicated
+
+7. **DDL Statements** → ONLY in Database Schema (sql)
+   - Other docs reference table structures
+   - No CREATE TABLE duplicated
+
+**Validation Method:**
+- Search for duplicate definitions
+- Check for restated content
+- Verify references instead of copying
+- Flag any violations for correction
+
+### Completeness Checks
+
+Validate all required documents generated:
+
+**Core Templates (25):**
+- [ ] product-vision.md (vis)
+- [ ] brd.md (brd)
+- [ ] prd.md (prd)
+- [ ] epics.md (epic)
+- [ ] user-stories.md (stor)
+- [ ] frd.md (frd)
+- [ ] srs.md (srs)
+- [ ] drd.md (data)
+- [ ] erd.md (erd)
+- [ ] dbrd.md (db)
+- [ ] database-schema.md (sql)
+- [ ] data-dictionary.md (dict)
+- [ ] data-flow-diagram.md (flow)
+- [ ] data-catalog.md (cat)
+- [ ] backend-requirements.md (be)
+- [ ] uxsm.md (uxs)
+- [ ] uxdd.md (ux)
+- [ ] design-requirements.md (des)
+- [ ] wireframes.md (wire)
+- [ ] frontend-requirements.md (fe)
+- [ ] style-guide.md (sty)
+- [ ] architecture-diagram.md (arch)
+- [ ] tech-spec.md (tech)
+- [ ] jtbd.md (per)
+- [ ] user-journey.md (jour)
+
+**Supporting Files (as needed):**
+- [ ] product-brief.md (brief) - Optional
+- [ ] checklists.md - For gate validation
+- [ ] US-XXX.story.md - Individual story files for dev/QA
+- [ ] workflow.md - Process documentation
+- [ ] greenfield-fullstack.md - Workflow reference
+
+## Error Handling
+
+### Common Orchestration Failures
+
+**Gate Failure:**
+```
+Symptom: Define gate validation fails, missing DoD in P0 stories
+↓
+HMW: How might we quickly add DoD without blocking progress?
+↓
+Solution:
+1. Identify which P0 stories missing DoD
+2. Generate DoD from acceptance criteria (us-#)
+3. Validate DoD completeness with 5W2H
+4. Re-run Define gate validation
+```
+
+**Dependency Conflict:**
+```
+Symptom: Frontend needs API contracts but backend incomplete
+↓
+HMW: How might we unblock frontend while backend finalizes?
+↓
+Solution:
+1. Generate mock API contracts from FR-# requirements
+2. Document assumptions in frontend specs
+3. Add dependency note: "Validate against be when complete"
+4. Proceed with frontend, flag for sync later
+```
+
+**Parallel Workstream Conflict:**
+```
+Symptom: Data chain defines field "user_status", UX chain also defines same field
+↓
+HMW: How might we resolve naming conflicts without blocking parallel work?
+↓
+Solution:
+1. Identify conflict source (both defining dict.* field)
+2. Determine authoritative source (Data Dictionary)
+3. Update conflicting document to reference dict.user_status
+4. Validate Single Source of Truth compliance
+```
+
+**Missing Traceability:**
+```
+Symptom: NFR-# doesn't trace back to any US-# or FR-#
+↓
+HMW: How might we establish traceability for orphaned NFR?
+↓
+Solution:
+1. Review NFR context (why does it exist?)
+2. Identify which FR-# or US-# it supports
+3. Add explicit reference in NFR definition
+4. Update traceability matrix
+```
+
+## Workflow Execution
+
+### Standard Orchestration Flow
+
+```
+1. DISCOVER PHASE (Sequential)
+   └─ invoke: feature-development-chain (vis → brd)
+   └─ validate: Discover Gate
+   └─ decision: GO | NO-GO | ITERATE
+
+2. DEFINE PHASE (Sequential)
+   └─ invoke: feature-development-chain (prd → epic → stor → frd)
+   └─ validate: Define Gate
+   └─ decision: GO | DESCOPE | ITERATE
+
+3. DEVELOP PHASE - Architecture (Sequential)
+   └─ invoke: architecture-chain (srs → arch → tech)
+   └─ validate: Develop Gate
+   └─ decision: GO | REDESIGN | ITERATE
+
+4. DELIVER PHASE - Parallel Workstreams (Parallel)
+   ├─ invoke: data-chain (data → erd → db → sql → dict → flow → cat)
+   │  └─ validate: Data Track Gate
+   ├─ invoke: ux-chain (per → jour → uxs → ux → des → wire → sty → fe)
+   │  └─ validate: UX Track Gate
+   └─ invoke: api-backend (be)
+      └─ validate: Backend Track Gate
+
+   └─ CONVERGENCE: Frontend Requirements (fe)
+      └─ validate: Deliver Gate
+      └─ decision: GO | ITERATE | BLOCK
+
+5. RELEASE PHASE (Validation)
+   └─ validate: Complete documentation set
+   └─ validate: Traceability chains
+   └─ validate: Single Source of Truth
+   └─ validate: Release Gate
+   └─ decision: GO | ITERATE | ESCALATE
+```
+
+### Abbreviated Flows
+
+**Skip Product Brief:**
+```
+vis → brd → DISCOVER GATE → prd → epic → stor → frd → DEFINE GATE
+```
+
+**Fast Path (Skip Supporting Files):**
+```
+Generate only 25 core templates, skip:
+- product-brief.md
+- checklists.md
+- story-file-template.md
+- workflow.md
+```
+
+**Iterative Refinement:**
+```
+Allow iteration loops at any phase:
+- vis ↔ brd (align on problem)
+- prd ↔ epic ↔ stor (refine scope)
+- stor ↔ frd (clarify requirements)
+- srs ↔ arch ↔ tech (optimize architecture)
+```
+
+## Gate Criteria Reference
+
+### Discover Gate (After BRD) - **INTERACTIVE REVIEW**
+
+**After generating vis and brd, conduct collaborative gate review:**
+
+```
+"Let's review the Discover Gate together to decide if we should proceed to Define phase:
+
+**Vision Completeness:**
+✓ Vision: '[One-line vision]' - Does this pass the 't-shirt test'? Is it clear and memorable?
+✓ 5W2H: I've gathered [list what was covered] - What am I missing?
+✓ North Star Metric: [Metric] from [baseline] to [target] in [window] - Is this the right metric to track?
+✓ Critical Success Drivers: [List 3-5 drivers] - Are these the right priorities?
+✓ Kill Criteria: [Criteria] - Under what conditions should we stop this project?
+
+**Business Case:**
+✓ Business Objectives: [N] BO-# objectives defined - Are these the right objectives?
+✓ ROI: [X]% with [Y] month payback - Is this compelling enough to proceed?
+✓ Stakeholders: [Key stakeholders] - Who else should be involved?
+✓ Success Metrics: [Metrics] - How will we measure success?
+✓ Risks: [Top 3 risks] - What are our mitigation plans?
+
+**5W2H Coverage Check:**
+- WHAT: [Problem statement] - Clear and specific?
+- WHO: [Target users] - Do we understand them?
+- WHERE: [Market context] - Competitive landscape clear?
+- WHEN: [Timeline] - Realistic deadlines?
+- WHY: [Business value] - Quantified?
+- HOW: [Approach] - Measurement strategy defined?
+- HOW MUCH: [Market size] - Revenue potential estimated?
+
+**Gate Decision - What should we do?**
+
+A) **GO** - Proceed to Define phase
+   - Problem validated
+   - Business case approved
+   - Confidence level high
+
+B) **NO-GO** - Stop project
+   - Doesn't make business sense
+   - Market too small / too competitive
+   - ROI insufficient
+
+C) **ITERATE** - Refine vision or business case
+   - Gaps in 5W2H analysis
+   - Need more user research
+   - Business case needs strengthening
+
+What's your decision? Why?"
+```
+
+[**CRITICAL: Wait for user's explicit decision. Do NOT proceed to Define phase without GO approval.**]
+
+If ITERATE, ask:
+```
+"What specific areas need refinement?
+- Vision clarity?
+- NSM definition?
+- Business case numbers?
+- Risk analysis?
+- Other?"
+```
+
+[Return to feature-development-chain to refine identified areas, then re-review gate.]
+
+### Define Gate (After FRD) - **INTERACTIVE REVIEW**
+
+**After generating prd, epic, stor, and frd, conduct collaborative gate review:**
+
+```
+"Let's review the Define Gate together to decide if we're ready for Develop phase:
+
+**Requirements Completeness:**
+✓ PRD Must Features: [N] features defined - Each has ≥1 epic with success criteria?
+✓ Epics: [N] epics created - Each has ≥3 user stories?
+✓ User Stories: [N] P0 stories - Each has ≥3 scenarios (Happy/Alt/Error)?
+✓ Story Quality: All stories have DoR met and DoD defined?
+✓ FRD Coverage: Flows, business rules, states, error handling all documented?
+✓ TBD Items: [N] TBD items remaining in P0 scope - Acceptable?
+✓ FR Traceability: All FR-# IDs trace to US-# IDs?
+
+**Traceability Chain Validation:**
+I've validated the complete traceability chain:
+- vis (vision) → BO-# (business objectives) ✓
+- BO-# → PRD-F-# (product features) ✓
+- PRD-F-# → FR-# (feature requirements - decomposition) ✓
+- FR-# → US-# (user stories - implementation) ✓
+
+Any orphaned IDs? [List any broken references]
+Any missing links? [List any gaps]
+
+**5W2H Coverage Check:**
+- WHAT: All Must features detailed? Acceptance criteria clear?
+- WHO: Owners assigned for each epic/story?
+- WHERE: Feature boundaries and integration points clear?
+- WHEN: Story priorities defined? Sprint planning ready?
+- WHY: Rationale for each Must feature documented?
+- HOW: Implementation approach outlined in FR-#?
+- HOW MUCH: Effort estimates done? Scope validated?
+
+**Scope Assessment:**
+- Must Features: [N] features (Recommended: 3-5 for focused MVP)
+- P0 User Stories: [N] stories
+- Estimated Effort: [rough estimate if available]
+
+Does this scope feel achievable? Too ambitious? Too conservative?
+
+**Gate Decision - What should we do?**
+
+A) **GO** - Proceed to Develop phase
+   - Requirements complete and clear
+   - Traceability validated
+   - Confidence in scope
+
+B) **DESCOPE** - Remove Should/Could features
+   - Scope too large
+   - Timeline too tight
+   - Focus on smaller MVP
+
+C) **ITERATE** - Clarify requirements
+   - Gaps in requirements
+   - Missing acceptance criteria
+   - Broken traceability
+   - Too many TBD items
+
+What's your decision? Why?"
+```
+
+[**CRITICAL: Wait for user's explicit decision. Do NOT proceed to Develop phase without GO approval.**]
+
+If DESCOPE, ask:
+```
+"Which features should we move from Must to Should/Could?
+- Feature: [PRD-F-#] - Keep Must or descope?
+- [Repeat for all Must features]
+
+What's your new target scope?"
+```
+
+If ITERATE, ask:
+```
+"What needs clarification?
+- Specific user stories missing acceptance criteria?
+- FRD gaps in flows/rules/states?
+- Traceability broken somewhere?
+- Too many TBD items to address?
+- Other?"
+```
+
+[Return to feature-development-chain to address identified issues, then re-review gate.]
+
+### Develop Gate (After Tech Spec) - **INTERACTIVE REVIEW**
+
+**After generating srs, arch, and tech, conduct collaborative gate review:**
+
+```
+"Let's review the Develop Gate together to decide if we're ready for parallel Deliver workstreams:
+
+**Architecture Completeness:**
+✓ NFR Coverage: [N] NFRs defined - Each has target, verification method, owner, acceptance threshold?
+✓ NFR Categories: Covered performance, scalability, security, reliability, maintainability, usability?
+✓ 5W2H Analysis: Key NFRs justified with 5W2H analysis?
+✓ C4 Architecture: Context, Container, Component diagrams complete?
+✓ NFR Support: Architecture supports all NFR-# requirements? Any conflicts?
+✓ ADRs: [N] ADRs documented - Alternatives considered for major decisions?
+✓ Implementation Tactics: Each P0 NFR has tactics defined?
+✓ Validation Plan: Testing approach defined for NFRs?
+✓ Architectural Debt: Any tech debt in critical path? [List if any]
+✓ HMW Statements: Constraints transformed into opportunities?
+
+**Architecture Decisions Review:**
+Key decisions made:
+- Architecture Style: [Monolith/Modular/Microservices] - Rationale: [why]
+- Database Strategy: [Single/Per-Service/CQRS] - Rationale: [why]
+- Integration Pattern: [Sync/Async/Hybrid] - Rationale: [why]
+
+Do these decisions align with your NFRs and team capabilities?
+
+**NFR Feasibility Check:**
+Let me highlight critical NFRs and their tactics:
+- NFR-1 ([category]): [target] - Tactic: [approach] - Feasible?
+- NFR-2 ([category]): [target] - Tactic: [approach] - Feasible?
+- [List all P0 NFRs]
+
+Are these targets realistic? Do tactics achieve them?
+
+**5W2H Coverage Check:**
+- WHAT: All quality attributes quantified?
+- WHO: NFR ownership assigned?
+- WHERE: System boundaries clear?
+- WHEN: Verification timing defined (CI/CD stage)?
+- WHY: NFR targets justified with rationale?
+- HOW: Implementation tactics documented?
+- HOW MUCH: Infrastructure budget estimated?
+
+**Gate Decision - What should we do?**
+
+A) **GO** - Start parallel workstreams (Data, UX, Backend)
+   - Architecture sound and supports NFRs
+   - ADRs document decisions clearly
+   - Validation plan in place
+   - Confidence in technical approach
+
+B) **REDESIGN** - Architecture inadequate
+   - Architecture doesn't support NFRs
+   - Major design flaws identified
+   - Need fundamental rethinking
+
+C) **ITERATE** - Refine NFRs or tactics
+   - NFR targets unclear or unrealistic
+   - Missing implementation tactics
+   - ADRs need more alternatives explored
+   - Validation plan incomplete
+
+What's your decision? Why?"
+```
+
+[**CRITICAL: Wait for user's explicit decision. Do NOT proceed to Deliver phase without GO approval.**]
+
+If REDESIGN, ask:
+```
+"What architectural issues need addressing?
+- Architecture style wrong for requirements?
+- Database strategy inadequate?
+- Integration patterns won't scale?
+- NFRs can't be met with this approach?
+- Other fundamental concerns?"
+```
+
+If ITERATE, ask:
+```
+"What needs refinement?
+- Specific NFRs need clearer targets?
+- Missing implementation tactics for NFR-#?
+- ADRs need more alternatives?
+- Validation plan gaps?
+- Other?"
+```
+
+[Return to architecture-chain to address identified issues, then re-review gate.]
+
+### Deliver Gate (After Frontend Convergence) - **INTERACTIVE REVIEW**
+
+**After all three parallel workstreams (Data, UX, Backend) complete and frontend converges, conduct collaborative gate review:**
+
+```
+"Let's review the Deliver Gate together to decide if we're ready for Release:
+
+**Parallel Track Completeness:**
+
+**Data Track Status:**
+✓ Entities: [N] entities defined with 5W2H analysis?
+✓ ERD: Complete with all relationships?
+✓ Database Constraints: Documented?
+✓ DDL: All CREATE TABLE statements in database-schema.md (Single Source)?
+✓ Data Dictionary: All dict.* fields and ev.* events defined (Single Source)?
+✓ Data Flows: Mapped?
+✓ Data Catalog: Governance in place?
+
+**UX Track Status:**
+✓ JTBD: Documented with desired outcomes and forces?
+✓ Journey Maps: Pain points and HMW statements captured?
+✓ Sitemap: All routes, views, and navigation flows complete?
+✓ UX Patterns: Documented with rationale?
+✓ Components: States, behaviors, accessibility specified?
+✓ Wireframes: All key screens at all breakpoints?
+✓ Style Guide: ALL tok.* tokens defined (Single Source)?
+✓ Frontend Specs: Routing, state, telemetry, a11y documented?
+
+**Backend Track Status:**
+✓ API Endpoints: All documented with 5W2H?
+✓ Schemas: Request/response schemas defined?
+✓ Auth: Authentication/authorization specified?
+✓ Error Handling: Envelope defined?
+✓ Versioning: API versioning strategy?
+✓ Rate Limiting: Policies defined?
+✓ Observability: Standards set?
+
+**Convergence Validation:**
+Frontend (fe) successfully references:
+- Backend APIs (be): [List key endpoints] ✓
+- Data Dictionary (dict.*): [List key fields] ✓
+- Design Tokens (tok.*): [List key tokens] ✓
+
+**Conflict Check:**
+Any conflicting assumptions between tracks? [List any conflicts]
+Any duplicate definitions violating Single Source of Truth? [List any]
+
+**Traceability Check:**
+- FR-# → API endpoints (be) ✓
+- FR-# → entities (erd) ✓
+- US-# → screens (wire) ✓
+- US-# → frontend features (fe) ✓
+
+Any broken chains? [List any gaps]
+
+**5W2H Coverage Check:**
+- WHAT: All implementation specs complete?
+- WHO: Implementation owners assigned?
+- WHERE: Component/service boundaries clear?
+- WHEN: Implementation sequence defined?
+- WHY: Technical decisions justified?
+- HOW: Integration approach documented?
+- HOW MUCH: Development effort estimated?
+
+**Gate Decision - What should we do?**
+
+A) **GO** - Proceed to Release
+   - All three tracks complete
+   - Frontend convergence successful
+   - No conflicts between tracks
+   - Traceability maintained
+   - Ready for implementation
+
+B) **ITERATE** - Resolve conflicts or gaps
+   - Conflicting assumptions between tracks
+   - Frontend missing API contracts or tokens
+   - Traceability broken
+   - Single Source violations
+
+C) **BLOCK** - One track incomplete
+   - Data track incomplete
+   - UX track incomplete
+   - Backend track incomplete
+   - Must complete before converging
+
+What's your decision? Why?"
+```
+
+[**CRITICAL: Wait for user's explicit decision. Do NOT proceed to Release without GO approval.**]
+
+If ITERATE, ask:
+```
+"What conflicts or gaps need resolution?
+- Specific conflicts between Data/UX/Backend?
+- Frontend missing dependencies?
+- Traceability gaps?
+- Single Source violations?
+- Other?"
+```
+
+If BLOCK, ask:
+```
+"Which track is incomplete?
+- Data chain: What's missing?
+- UX chain: What's missing?
+- Backend chain: What's missing?
+
+Should we:
+- Wait for completion?
+- Descope blocking items?
+- Generate missing documents now?"
+```
+
+[Address identified issues, then re-review gate when all tracks complete.]
+
+### Release Gate (Before Implementation) - **INTERACTIVE REVIEW**
+
+**After all documentation complete, conduct final collaborative gate review:**
+
+```
+"Let's conduct the Release Gate review to decide if documentation is ready for implementation:
+
+**Documentation Completeness:**
+✓ Core Templates: [N]/25 generated - All present?
+  - Product: vis, brd, prd, epic, stor, frd
+  - Architecture: srs, arch, tech
+  - Data: data, erd, db, sql, dict, flow, cat
+  - UX: per, jour, uxs, ux, des, wire, sty, fe
+  - Backend: be
+✓ Supporting Files: Generated as needed (checklists, story files)?
+✓ Broken References: [N] broken ID references found - Acceptable?
+✓ Single Source: No overlapping definitions?
+✓ Traceability: All chains complete?
+✓ Gates: All 4 previous gates passed (Discover, Define, Develop, Deliver)?
+
+**Quality Assurance Summary:**
+
+**Traceability Matrix:**
+I've validated complete traceability across all documents:
+- Problem → Solution: vis → BO-# → PRD-F-# → EP-# ✓
+- Requirements → Implementation: EP-# → US-# → FR-# → NFR-# ✓
+- Architecture → Components: NFR-# → arch → ADR-# ✓
+- Data: FR-# → entities → tables → dict.* ✓
+- UX: US-# → screens → components → tok.* ✓
+- API: FR-# → endpoints → schemas ✓
+
+Any orphaned IDs? [List any]
+Any broken chains? [List any]
+
+**Single Source of Truth Validation:**
+Verified single sources:
+- Given/When/Then: ONLY in User Stories (stor) ✓
+- NFR Targets: ONLY in SRS (srs) ✓
+- API Schemas: ONLY in Backend Requirements (be) ✓
+- Design Tokens: ONLY in Style Guide (sty) ✓
+- Field Definitions: ONLY in Data Dictionary (dict) ✓
+- Event Definitions: ONLY in Data Dictionary (dict) ✓
+- DDL Statements: ONLY in Database Schema (sql) ✓
+
+Any violations? [List any duplicate definitions]
+
+**Implementation Readiness:**
+✓ All Must features have clear implementation path?
+✓ All P0 NFRs have validation plan?
+✓ All P0 user stories have acceptance criteria?
+✓ All critical architecture decisions documented in ADRs?
+
+**5W2H Coverage Check:**
+- WHAT: All required artifacts complete?
+- WHO: All owners identified and accountable?
+- WHERE: All templates in proper locations?
+- WHEN: Timeline validated? No blocking TBDs?
+- WHY: Rationale documented for all key decisions?
+- HOW: Implementation approach clear for all components?
+- HOW MUCH: Scope, budget, effort estimates validated?
+
+**Final Completeness:**
+- Total Documents: [N] generated
+- Total IDs: [N] defined (vis, BO-#, PRD-F-#, EP-#, US-#, FR-#, NFR-#, dict.*, ev.*, tok.*, etc.)
+- Broken References: [N]
+- Single Source Violations: [N]
+- TBD Items: [N] remaining
+
+**Gate Decision - What should we do?**
+
+A) **GO** - Start implementation
+   - All documents complete and validated
+   - Traceability chains intact
+   - Single Source of Truth respected
+   - No critical gaps
+   - Ready for development
+
+B) **ITERATE** - Fix gaps before implementation
+   - Broken references to fix
+   - Missing documents
+   - Traceability gaps
+   - Single Source violations
+   - Critical TBDs remaining
+
+C) **ESCALATE** - Major issues require stakeholder input
+   - Fundamental scope questions
+   - Conflicting requirements
+   - Resource constraints
+   - Timeline concerns
+
+What's your decision? Why?"
+```
+
+[**CRITICAL: Wait for user's explicit decision. This is the FINAL gate before implementation begins.**]
+
+If ITERATE, ask:
+```
+"What needs to be fixed before we can GO?
+- Specific broken references to repair?
+- Missing documents to generate?
+- Traceability gaps to close?
+- Single Source violations to resolve?
+- Critical TBDs to address?
+- Other?"
+```
+
+If ESCALATE, ask:
+```
+"What major issues require stakeholder input?
+- Scope conflicts?
+- Resource constraints?
+- Timeline concerns?
+- Technical risks?
+- Business case questions?
+- Other?
+
+Who should be involved in this decision?"
+```
+
+[Address all identified issues until GO decision is reached. Only then is documentation set ready for implementation phase.]
+
+## Best Practices
+
+1. **Conduct Interactive Gate Reviews:** Every gate is a collaborative decision - wait for explicit GO from user
+2. **Never Auto-Pass Gates:** Don't skip gate validation conversations - they prevent wasted downstream effort
+3. **Present Gate Decisions Clearly:** Always offer GO/NO-GO/ITERATE options with clear rationale
+4. **Respect Dependencies:** Never start dependent chains before prerequisites complete
+5. **Pause at Phase Transitions:** Stop at each gate for user review before proceeding to next phase
+6. **Parallel When Safe:** Launch Data/UX/Backend in parallel only after Develop gate passes
+7. **Validate Traceability Early:** Check ID chains regularly, don't wait until Release gate
+8. **Enforce Single Source:** Catch duplicate definitions early in each chain
+9. **Use HMW for Blockers:** Transform gate failures into opportunities collaboratively
+10. **Apply 5W2H Systematically:** Ensure completeness at every gate through structured questioning
+11. **Document Assumptions:** When proceeding with uncertainty, document explicitly and flag at gates
+12. **Iterate Freely:** Documents evolve with understanding - embrace revision cycles between gates
+13. **Reference, Don't Restate:** Link to upstream IDs instead of copying content
+14. **User Owns GO Decisions:** You present options and analysis; user decides to proceed or iterate
+
+## Common Pitfalls to Avoid
+
+- ❌ Skipping Discover gate (building wrong thing)
+- ❌ Starting parallel workstreams too early (before architecture complete)
+- ❌ Missing dependencies (starting chain without prerequisites)
+- ❌ Ignoring gate failures (proceeding with incomplete work)
+- ❌ Allowing duplicate definitions (violating Single Source of Truth)
+- ❌ Breaking traceability chains (orphaned IDs)
+- ❌ Skipping 5W2H validation (incomplete gate checks)
+- ❌ No HMW for blockers (missing creative solutions)
+- ❌ Treating documents as "done" (they evolve with product)
+- ❌ Proceeding to Release with broken references
+
+## Knowledge Base
+
+This skill coordinates all chain skills which reference template files:
+
+### Feature Development Chain Templates
+- product-vision.md, product-brief.md, brd.md, prd.md (with PRD-F-# features), epics.md, user-stories.md, frd.md (decomposes PRD-F-# into FR-# items)
+
+### Architecture Chain Templates
+- srs.md, architecture-diagram.md, tech-spec.md
+
+### Data Chain Templates
+- drd.md, erd.md, dbrd.md, database-schema.md, data-dictionary.md, data-flow-diagram.md, data-catalog.md
+
+### UX Chain Templates
+- jtbd.md, user-journey.md, uxsm.md, uxdd.md, design-requirements.md, wireframes.md, style-guide.md, frontend-requirements.md
+
+### Backend Chain Templates
+- backend-requirements.md
+
+### Supporting Templates
+- workflow.md, greenfield-fullstack.md, checklists.md, story-file-template.md, architect-checklist.md
+
+### ID Registry
+- `ids.yml` - ID management configuration for the ETUS (Event-Tracking Unified System)
+
+**Purpose of ids.yml:**
+
+The `ids.yml` file is a critical resource that defines:
+- **ID patterns and conventions** (lowercase kebab-case, separators, invariants)
+- **Document namespaces** (vis, brd, prd, epic, stor, frd, srs, etc.)
+- **ID sequences** (PRD-F-#, EP-#, US-#, FR-#, NFR-#, BO-#, ADR-#, be-ep-#)
+- **Naming patterns** (routes, views, components, entities, events, tables)
+- **Linting rules** (Single Source of Truth enforcement)
+- **Governance policies** (change control, deprecation, versioning)
+
+**How to Use:**
+
+1. **For New Projects:**
+   - Copy `ids.yml` from `orchestrator/knowledge/` to your project root
+   - Update `registry.product`, `registry.namespace`, and `registry.owner` with your values
+   - Initialize date: `registry.updated: "YYYY-MM-DD"`
+
+2. **During Generation:**
+   - Orchestrator references `ids.yml` patterns to generate compliant IDs
+   - All generated IDs follow the conventions defined in `ids.yml`
+   - Traceability chains respect the patterns (vis → BO-# → PRD-F-# → EP-# → US-# → FR-#)
+
+3. **Maintenance:**
+   - Update `ids.yml` when adding new ID patterns
+   - Increment `registry.version` when making changes
+   - Use `aliases.deprecated` for ID migrations
+
+**Key Sections:**
+
+- `conventions`: Character set, casing rules, separators, invariants
+- `namespaces.docs`: All document IDs (vis, brd, prd, etc.)
+- `patterns`: Regex patterns for each ID type with `next` counters
+- `sequences`: Current ID counters (incremented as IDs are generated)
+- `documents`: Recommended file destinations and naming patterns
+- `lint.rules`: Single Source of Truth enforcement rules
+- `governance`: Change control and deprecation policies
+
+**Example Usage:**
+
+```yaml
+# After generating documentation, ids.yml tracks:
+sequences:
+  PRD-F: 6     # 5 features defined in PRD
+  ep: 12       # 11 epics created
+  US: 45       # 44 user stories written
+  FR: 89       # 88 functional requirements documented
+  NFR: 23      # 22 non-functional requirements specified
+  BO: 4        # 3 business objectives defined
+  ADR: 7       # 6 architecture decisions recorded
+  be-ep: 15    # 14 backend API endpoints specified
+```
+
+This registry ensures:
+- ✅ **No ID collisions** across documents
+- ✅ **Complete traceability** from vision to implementation
+- ✅ **Consistent naming** across all teams
+- ✅ **Single Source of Truth** enforcement
+- ✅ **Governance compliance** for ID lifecycle
+
+## Persistence Options
+
+**After generating all documentation, offer the user these persistence options:**
+
+### Default: Display in Conversation
+
+By default, show generated documents in the conversation for user to review and manually save:
+
+```
+"I've generated all 25 core documentation files. Here's the complete set:
+
+**Discovery & Planning (7 files):**
+- product-vision.md
+- brd.md
+- prd.md
+- epics.md
+- user-stories.md
+- frd.md
+- srs.md
+
+**Architecture & Data (10 files):**
+- architecture-diagram.md
+- tech-spec.md
+- drd.md
+- erd.md
+- dbrd.md
+- database-schema.md
+- data-dictionary.md
+- data-flow-diagram.md
+- data-catalog.md
+- backend-requirements.md
+
+**UX & Frontend (8 files):**
+- jtbd.md
+- user-journey.md
+- uxsm.md
+- uxdd.md
+- design-requirements.md
+- wireframes.md
+- style-guide.md
+- frontend-requirements.md
+
+I can show you each document here for you to copy/paste and save manually.
+
+Alternatively, would you like me to save all files to a directory for you? Just provide the path (e.g., `/path/to/your-project/docs/`) and I'll use the Write tool to create all files automatically."
+```
+
+### Option 1: Save to Local Directory (User Requests)
+
+If user provides a directory path, use Write tool to save all files:
+
+```
+User: "Save all documents to /Users/me/my-project/docs/"
+
+Action:
+1. Validate directory exists (or create it)
+2. For each of the 25 core documents:
+   - Use Write tool: file_path="/Users/me/my-project/docs/{filename}", content="{generated_content}"
+3. For supporting files (if generated): Same process
+4. Confirm: "✅ Saved 25 files to /Users/me/my-project/docs/"
+```
+
+### Option 2: Notion Integration (Future Enhancement)
+
+Potential future option to persist to Notion workspace:
+
+```
+- Create Notion database with all 25 documents as pages
+- Maintain cross-document links using @ mentions
+- Preserve traceability chains (vis → BO-# → PRD-F-# → EP-# → US-# → FR-#)
+- Searchable and collaborative
+```
+
+**Implementation Note:** This requires Notion MCP tools to be available.
+
+### Important: Templates vs Generated Content
+
+**Templates are read-only:**
+- Skills READ templates from `knowledge/` folders as reference guides
+- Templates are NEVER modified or overwritten during generation
+- Templates remain clean and version-controlled
+- Generated content is NEVER written back to skill folders
+
+**Generated content flow:**
+1. Skill reads template from `knowledge/` folder (reference)
+2. Conducts interactive interview with user
+3. Generates content based on template structure + user input
+4. Returns content to conversation OR saves to user's project directory
+5. Skill's `knowledge/` folder remains unchanged
+
+This clean separation ensures:
+- ✅ Templates stay pristine and reusable
+- ✅ Skills can be distributed without user-specific data
+- ✅ Generated content goes where user wants it
+- ✅ No risk of corrupting template files
+
+## Next Steps After This Skill
+
+After orchestration completes:
+
+1. **Implementation Phase**: Use generated documents to build the product
+2. **Validation Phase**: Test implementation against acceptance criteria (us-#) and NFRs (nfr-#)
+3. **Iteration Phase**: Update documents based on implementation learnings
+4. **Maintenance Phase**: Keep documents in sync with product evolution
+
+The orchestrator ensures a complete, traceable, high-quality documentation foundation for rapid product development.

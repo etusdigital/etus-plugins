@@ -1,0 +1,794 @@
+---
+name: data-chain
+description: Generate comprehensive data architecture documents (data requirements, ERD, database requirements, schema DDL, data dictionary with events, data flow diagrams, data catalog) using 5W2H for systematic data analysis. Use when designing data models, database schemas, or data governance for solo developers.
+---
+
+# Data Chain
+
+Generate complete data architecture documentation from entity definitions through data governance using systematic 5W2H analysis.
+
+## Purpose
+
+This skill guides solo developers through data modeling and governance by generating **through interactive conversation**:
+
+1. **Data Requirements Document** (data) - Entity definitions and data needs
+2. **Entity Relationship Diagram** (erd) - Relationships and cardinality
+3. **Database Requirements** (db) - Constraints, indexes, performance requirements
+4. **Database Schema** (sql) - DDL statements (ONLY place for CREATE TABLE)
+5. **Data Dictionary** (dict) - Field semantics (dict.*) and events (ev.*) (ONLY place)
+6. **Data Flow Diagram** (flow) - Data processing and transformations
+7. **Data Catalog** (cat) - Data asset inventory and lineage
+
+Each document maintains traceability with lowercase IDs, establishing the authoritative data architecture.
+
+## Interactive Data Modeling
+
+**This skill is conversation-driven for data discovery.**
+
+Data modeling requires deep domain knowledge that must come from the user:
+1. **Entity Discovery Interview** - What entities exist in your domain?
+2. **Relationship Validation** - How do entities relate? (1-1, 1-many, many-many)
+3. **Field Semantics Discussion** - What does each field mean in business context?
+4. **Event Definition** - What business events should we track?
+
+**Key Principle:** The user has domain knowledge; this skill extracts it systematically.
+
+**Do NOT:**
+- Assume entity structure based on generic patterns
+- Guess relationship cardinality
+- Define field validations without asking about business rules
+- Create events without understanding what to track
+
+**Success Criteria:** Data model reflects user's actual domain, not generic assumptions.
+
+## When to Use This Skill
+
+Use this skill when:
+- Designing data models for new product or feature
+- Need to document database schema and field semantics
+- Defining data governance and data quality standards
+- Running Deliver phase parallel workstream (Data track)
+- Establishing authoritative source for field definitions and events
+
+Do NOT use for:
+- API design (use api-backend skill instead)
+- UX design (use ux-chain skill instead)
+- Business requirements (use feature-development-chain skill instead)
+
+**Dependencies:** Requires `srs` (software requirements with NFRs) from architecture-chain as input.
+
+## Methodology Integration
+
+### 5W2H for Systematic Data Analysis
+
+Apply rigorous questioning to ensure complete data model:
+
+**WHAT:**
+- What entities exist in the domain?
+- What attributes describe each entity?
+- What data types are appropriate?
+
+**WHO:**
+- Who creates this data?
+- Who owns this data?
+- Who can read/update/delete this data?
+
+**WHERE:**
+- Where is this data created?
+- Where is this data stored?
+- Where is this data used?
+
+**WHEN:**
+- When is this data created?
+- When does this data change?
+- When should this data be purged?
+
+**WHY:**
+- Why do we need this entity?
+- Why this normalization level?
+- Why these constraints?
+
+**HOW:**
+- How is data validated?
+- How is data transformed?
+- How is data synchronized?
+
+**HOW MUCH:**
+- How much data volume expected?
+- How much growth anticipated?
+- How much historical data to retain?
+
+### How Might We for Data Challenges
+
+Transform data modeling constraints into opportunities:
+
+**Example Transformations:**
+
+```
+Challenge: User data scattered across 5 legacy tables, inconsistent
+↓
+HMW: How might we unify user data while maintaining backward compatibility?
+↓
+Opportunity: Create unified user view (materialized view), gradually migrate writes
+```
+
+```
+Challenge: Complex many-to-many relationships causing query performance issues
+↓
+HMW: How might we optimize queries while preserving data integrity?
+↓
+Opportunity: Denormalize for reads (CQRS pattern), maintain normalized write model
+```
+
+```
+Challenge: Need real-time analytics but OLTP database can't handle query load
+↓
+HMW: How might we serve analytics without impacting transactional performance?
+↓
+Opportunity: CDC (Change Data Capture) to analytics database, separate read concerns
+```
+
+## How to Use This Skill
+
+### Step 1: Data Requirements Document (data) - **INTERACTIVE ENTITY DISCOVERY**
+
+**BEFORE generating**, conduct Entity Discovery Interview:
+
+```
+"Let's discover the entities in your domain. I'll ask about the main 'things' your system manages:
+
+1. What ENTITIES exist in your product?
+   - What are the main objects users work with?
+   - Examples: Users? Orders? Projects? Documents? [What else?]
+
+2. For each entity, help me understand:
+   - WHAT is it? (One-sentence definition)
+   - WHO creates/owns/manages it?
+   - WHERE does the data come from originally?
+   - WHEN is it created/updated/deleted?
+   - WHY does this entity need to exist?
+   - HOW MUCH data? (Thousands? Millions of records?)"
+```
+
+[Wait for user to list entities. Then for EACH entity, apply detailed 5W2H below]
+
+#### Entity Discovery (Apply per Entity)
+
+```
+Apply 5W2H per Entity:
+
+WHAT is this entity?
+- Definition: Clear description of what the entity represents
+- Examples: 3-5 real-world examples
+- Scope: What's included vs excluded
+
+WHO interacts with this entity?
+- Creators: Who can create instances?
+- Consumers: Who reads this data?
+- Owners: Who is authoritative source?
+
+WHERE does this entity exist?
+- Source systems: Where is it created?
+- Storage: Where is authoritative copy?
+- Usage: Where is it consumed?
+
+WHEN lifecycle events?
+- Created: What triggers creation?
+- Modified: What causes updates?
+- Deleted: When is it removed/archived?
+
+WHY does this entity exist?
+- Business purpose: What need does it fulfill?
+- Traces to: Which BRD objectives or PRD features?
+
+HOW is data maintained?
+- Creation process: Manual, automated, imported?
+- Update process: Real-time, batch, event-driven?
+- Validation: What rules must be satisfied?
+
+HOW MUCH volume/growth?
+- Current volume: How many instances today?
+- Growth rate: Expected increase over time?
+- Retention: How long to keep historical data?
+```
+
+**Example Entity Definition:**
+```
+Entity: User
+Definition: A person with an account in the system who can perform actions
+Examples: Free user, Pro subscriber, Admin user, API-only user, Deactivated user
+
+WHAT attributes?
+- Identity: email, user_id, username
+- Profile: name, avatar_url, bio
+- Status: account_status, subscription_tier, created_at, last_login_at
+- Preferences: timezone, language, notification_settings
+
+WHO interacts?
+- Creators: User themselves (signup), Admin (invite), API (bulk import)
+- Consumers: All features need user context, Analytics, Billing
+- Owners: User table is authoritative source
+
+WHERE?
+- Created: Signup flow, Admin panel, API endpoint
+- Stored: PostgreSQL users table (primary), Redis (session cache)
+- Used: Every authenticated request, Reporting, Email campaigns
+
+WHEN lifecycle?
+- Created: Signup completion (email verified)
+- Modified: Profile updates, subscription changes, login events
+- Deleted: GDPR deletion request (soft delete + anonymization after 30 days)
+
+WHY exists?
+- Business purpose: Enable personalized experience, track usage, bill customers
+- Traces to: BRD-BO-1 (grow user base), PRD-F-3 (user profiles)
+
+HOW maintained?
+- Creation: Form validation (email format, password strength), uniqueness check
+- Updates: Optimistic locking for concurrency, audit trail
+- Validation: Email verified before activation, payment method for paid tiers
+
+HOW MUCH?
+- Current: 50,000 users (as of launch)
+- Growth: 10,000 new users/month projected
+- Retention: Active users indefinitely, deleted users anonymized after 30 days
+```
+
+**Template Reference:** See `knowledge/drd.md` for complete data requirements framework
+
+### Step 2: Entity Relationship Diagram (erd)
+
+Document relationships and cardinality:
+
+#### Relationship Types
+
+```
+One-to-One (1:1)
+Example: User → UserProfile
+Rationale: Profile is extension of user, always paired
+
+One-to-Many (1:N)
+Example: User → Orders
+Rationale: User can have multiple orders, each order belongs to one user
+
+Many-to-Many (M:N)
+Example: Users ↔ Teams (via UserTeam join table)
+Rationale: Users can be in multiple teams, teams have multiple users
+```
+
+#### Apply 5W2H to Relationships
+
+```
+For each relationship:
+
+WHAT is the relationship?
+- Name: User "places" Order
+- Type: One-to-Many
+- Cardinality: User (1) → Order (0..*)
+
+WHY does this relationship exist?
+- Business rule: Every order must belong to a user
+- Traces to: PRD-F-5 (order history)
+
+HOW is relationship enforced?
+- Foreign key: orders.user_id REFERENCES users(id)
+- Cascade: ON DELETE SET NULL (preserve order, orphan if user deleted)
+- Index: orders.user_id indexed for query performance
+
+WHERE is relationship used?
+- Order history page (find all orders for user)
+- User dashboard (order count, recent orders)
+- Analytics (orders per user)
+
+WHEN can relationship change?
+- Created: When order is placed
+- Modified: Never (user_id immutable once set)
+- Deleted: If user is deleted, orders remain but user_id NULL
+
+HOW MUCH impact?
+- Query frequency: 10k queries/day
+- Data volume: Average 5 orders/user
+```
+
+**Create HMW for Relationship Challenges:**
+```
+Challenge: User-Order relationship causes performance issues (large result sets)
+↓
+HMW: How might we efficiently retrieve user's orders without loading thousands of rows?
+↓
+Solution: Pagination + caching (most recent 50 orders), lazy load older orders on demand
+```
+
+**Template Reference:** See `knowledge/erd.md` for ERD modeling standards
+
+### Step 3: Database Requirements (db)
+
+Define constraints, indexes, and performance requirements:
+
+#### Constraints
+
+```
+Apply 5W2H to Constraints:
+
+WHAT constraint type?
+- Primary Key: Unique identifier for each row
+- Foreign Key: Enforces referential integrity
+- Unique: Ensures no duplicate values
+- Check: Validates data against business rules
+- Not Null: Prevents missing required data
+
+WHY this constraint?
+- Data integrity: Prevent invalid states
+- Business rule: Enforce domain logic
+- Performance: Enable query optimization
+
+HOW enforced?
+- Database level: Constraint in DDL
+- Application level: Validation before insert/update
+- Both: Defense in depth
+
+WHEN validated?
+- INSERT/UPDATE: Checked on every write
+- Deferred: At transaction commit (for complex rules)
+
+HOW MUCH performance impact?
+- Index overhead: How much does constraint slow writes?
+- Query benefit: How much does it speed reads?
+```
+
+**Example Constraints:**
+```
+users table:
+- PRIMARY KEY (id): UUID primary key for global uniqueness
+  WHY: Enable distributed ID generation, avoid collisions in multi-region
+
+- UNIQUE (email): No duplicate emails allowed
+  WHY: Email is login credential, must be unique
+  HOW: Case-insensitive unique index (lower(email))
+
+- CHECK (account_status IN ('active', 'suspended', 'deleted')): Valid status only
+  WHY: Prevent typos in status field, enable status-based queries
+
+- NOT NULL (email, created_at): Required fields can't be missing
+  WHY: Business rules require these fields for all users
+```
+
+#### Indexes
+
+```
+Apply 5W2H to Index Design:
+
+WHAT columns to index?
+- Foreign keys: Always indexed
+- Query filters: Columns in WHERE clauses
+- Sort columns: Columns in ORDER BY
+- Join columns: Columns used in joins
+
+WHY this index?
+- Query pattern: Which queries does it optimize?
+- Performance target: What speedup expected?
+- Volume: How many rows? Index helps at >1000 rows
+
+HOW MUCH overhead?
+- Write cost: Indexes slow INSERT/UPDATE
+- Storage: B-tree index ~1.2x data size
+- Maintenance: Auto-vacuum, reindex cadence
+
+WHERE to apply?
+- Hot tables: Tables queried frequently
+- Large tables: Tables with >10k rows
+- Avoid: Rarely queried tables, low cardinality columns
+
+WHEN to add?
+- Upfront: Foreign keys, unique constraints
+- After analysis: Based on slow query log
+- Avoid: Premature optimization
+```
+
+**Example Indexes:**
+```
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+WHY: Query "find all orders for user" runs 10k times/day
+IMPACT: Query time: 800ms → 12ms
+COST: Write overhead: +5%, Storage: +50MB
+
+CREATE INDEX idx_orders_created_at ON orders(created_at DESC);
+WHY: Order history sorted by recent-first
+IMPACT: ORDER BY query: 400ms → 8ms
+COST: Write overhead: +5%, Storage: +45MB
+
+CREATE INDEX idx_users_email_lower ON users(lower(email));
+WHY: Case-insensitive email lookup for login
+IMPACT: Login query: 150ms → 5ms
+COST: Write overhead: +3%, Storage: +20MB
+```
+
+**Template Reference:** See `knowledge/dbrd.md` for database requirements specification
+
+### Step 4: Database Schema (sql)
+
+Generate DDL statements (ONLY place for CREATE TABLE):
+
+**Critical Rule:** This is the SINGLE SOURCE OF TRUTH for schema definitions. All other documents reference this, never redefine schema elsewhere.
+
+```sql
+-- Example DDL with 5W2H documentation
+
+-- Table: users
+-- WHY: Store user account information for authentication and profile
+-- WHO: Created by signup flow, Auth service owns
+-- HOW MUCH: 50k initial, 10k/month growth, indefinite retention
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) NOT NULL,
+    email_verified_at TIMESTAMP,
+    password_hash VARCHAR(255) NOT NULL,
+    account_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (account_status IN ('pending', 'active', 'suspended', 'deleted')),
+    subscription_tier VARCHAR(20) NOT NULL DEFAULT 'free'
+        CHECK (subscription_tier IN ('free', 'pro', 'enterprise')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP,
+
+    -- WHY: Email is unique login credential
+    CONSTRAINT unique_email UNIQUE (lower(email))
+);
+
+-- WHY: Faster user lookup by email (most common query)
+CREATE INDEX idx_users_email_lower ON users(lower(email));
+
+-- WHY: Filter users by status for admin views
+CREATE INDEX idx_users_account_status ON users(account_status);
+
+-- Table: orders
+-- WHY: Store order transactions for billing and history
+-- WHO: Created by checkout flow, Billing service owns
+-- HOW MUCH: 250k/year, 7 years retention (tax compliance)
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    order_number VARCHAR(20) NOT NULL UNIQUE,
+    total_amount DECIMAL(10,2) NOT NULL CHECK (total_amount >= 0),
+    currency VARCHAR(3) NOT NULL DEFAULT 'USD',
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'paid', 'failed', 'refunded')),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- WHY: Query "show user's orders" runs 10k times/day
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+
+-- WHY: Order history sorted newest-first
+CREATE INDEX idx_orders_created_at_desc ON orders(created_at DESC);
+```
+
+**Apply HMW to Schema Optimization:**
+```
+Challenge: Users table has 50 columns, causing SELECT * queries to be slow
+↓
+HMW: How might we organize user data for better query performance?
+↓
+Solution: Split into users (core identity) + user_profiles (extended attributes),
+         join only when profile data needed
+```
+
+**Template Reference:** See `knowledge/database-schema.md` for DDL standards
+
+### Step 5: Data Dictionary (dict)
+
+Define field semantics and telemetry events (SINGLE SOURCE OF TRUTH):
+
+**Critical Rules:**
+- This is the ONLY place for dict.* field definitions
+- This is the ONLY place for ev.* event definitions
+- All other documents reference these, never redefine
+
+#### Field Definitions (dict.*)
+
+```
+Field: dict.user.email
+Data Type: VARCHAR(255)
+Format: RFC 5322 email address format
+Validation:
+- Regex: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+- Must be verified before activation
+Nullable: No (required for account)
+PII: Yes (personal identifier)
+Retention: Deleted/anonymized on user deletion request
+Sample Values: john.doe@example.com, user+test@domain.co
+Business Rules:
+- Must be unique across all users (case-insensitive)
+- Cannot change after verification (create new account if needed)
+- Used for login, password reset, notifications
+```
+
+```
+Field: dict.order.total_amount
+Data Type: DECIMAL(10,2)
+Format: Currency amount with 2 decimal places
+Validation:
+- Must be >= 0 (no negative orders)
+- Maximum: $99,999,999.99 (10 digits total, 2 decimal)
+Nullable: No (every order has a total)
+PII: No
+Retention: 7 years (tax compliance)
+Sample Values: 0.00, 29.99, 1499.50
+Business Rules:
+- Includes tax and shipping
+- Currency specified in separate order.currency field
+- Immutable once order is paid (refunds create separate records)
+```
+
+#### Event Definitions (ev.*)
+
+```
+Event: ev.user.signup.completed
+Trigger: When user completes email verification
+Payload:
+{
+  "event_id": "uuid",
+  "timestamp": "ISO 8601",
+  "user_id": "uuid",
+  "signup_method": "email|google|github",
+  "referral_source": "string|null",
+  "account_tier": "free|pro|enterprise"
+}
+Purpose: Track signup conversions, measure funnel effectiveness
+Consumers: Analytics, Marketing automation, Product metrics
+Retention: 2 years
+```
+
+```
+Event: ev.order.payment.succeeded
+Trigger: When payment gateway confirms successful charge
+Payload:
+{
+  "event_id": "uuid",
+  "timestamp": "ISO 8601",
+  "order_id": "uuid",
+  "user_id": "uuid",
+  "amount": "decimal",
+  "currency": "string",
+  "payment_method": "card|paypal|other"
+}
+Purpose: Track revenue, trigger fulfillment, update user tier
+Consumers: Billing, Analytics, Fulfillment service, Email service
+Retention: 7 years (compliance)
+```
+
+**Apply 5W2H to Events:**
+```
+WHAT event to track?
+- Business-critical: Signup, purchase, cancellation
+- Product insights: Feature usage, user flows
+- Technical: Errors, performance, security
+
+WHY track this event?
+- Business metric: Revenue, churn, conversion
+- Product decision: A/B test, feature usage
+- Operations: Alerting, debugging, compliance
+
+WHERE is event emitted?
+- Client: Browser, mobile app (ev.client.*)
+- Server: API, background job (ev.server.*)
+- External: Webhook from 3rd party (ev.webhook.*)
+
+HOW MUCH volume?
+- Frequency: Per user action, per hour, per day?
+- Retention: How long to keep raw events?
+- Cost: What's the storage/processing cost?
+```
+
+**Template Reference:** See `knowledge/data-dictionary.md` for dict.* and ev.* standards
+
+### Step 6: Data Flow Diagram (flow)
+
+Document data transformations and movement:
+
+#### Data Flow Structure
+
+```
+Flow: User Signup → Order Placement
+WHY: Show how user data flows from creation through first purchase
+
+1. User creates account (ev.user.signup.started)
+   Source: Web form
+   Destination: users table
+   Transformation: Password hashing, email normalization (lowercase)
+   Validation: Email format, password strength
+
+2. Email verification (ev.user.email.verified)
+   Source: Email verification link
+   Destination: users.email_verified_at
+   Transformation: Set timestamp, update account_status to 'active'
+
+3. User places order (ev.order.created)
+   Source: Checkout form
+   Destination: orders table
+   Transformation: Calculate total (items + tax + shipping), generate order_number
+   Validation: Inventory check, payment method valid
+
+4. Payment processed (ev.order.payment.succeeded)
+   Source: Payment gateway webhook
+   Destination: orders.status = 'paid'
+   Transformation: None (direct status update)
+   Side Effects: Send confirmation email, trigger fulfillment
+```
+
+**Apply HMW to Flow Optimization:**
+```
+Challenge: Payment processing is synchronous, causes timeout on slow connections
+↓
+HMW: How might we handle payment asynchronously while providing immediate feedback?
+↓
+Solution: Async payment processing (queue), show "processing" page, webhook updates status
+```
+
+**Template Reference:** See `knowledge/data-flow-diagram.md` for flow documentation
+
+### Step 7: Data Catalog (cat)
+
+Create data asset inventory and lineage:
+
+#### Catalog Structure
+
+```
+Asset: users table
+Type: Database Table
+Owner: Auth team
+Steward: John Smith (john@example.com)
+Criticality: High (core identity)
+PII: Yes (email, name)
+Retention: Indefinite (active), 30 days after deletion
+Last Updated: 2025-01-15
+Documentation: /docs/data/users-table.md
+Lineage:
+  Upstream:
+    - Signup API endpoint
+    - Admin user creation
+    - CSV bulk import
+  Downstream:
+    - Orders table (user_id FK)
+    - Analytics database (replicated)
+    - Email service (user notifications)
+    - Billing service (subscription management)
+Quality Metrics:
+  - Completeness: 99.8% (email verified)
+  - Uniqueness: 100% (email unique constraint)
+  - Validity: 99.5% (valid email format)
+```
+
+**Apply 5W2H to Data Governance:**
+```
+WHAT data assets exist?
+- Inventory: All tables, views, files, APIs
+
+WHO owns/stewards each asset?
+- Owner: Team responsible for quality
+- Steward: Person accountable for governance
+
+WHERE is data authoritative?
+- Source of truth: Which system is primary?
+- Replicas: Where are copies maintained?
+
+WHEN is data refreshed?
+- Real-time: CDC, event streams
+- Batch: Nightly ETL, weekly aggregation
+
+WHY retain this data?
+- Business need: Active use case
+- Compliance: Legal/regulatory requirement
+- Historical: Archival for analytics
+
+HOW is quality measured?
+- Completeness: % of non-null required fields
+- Accuracy: % matching validation rules
+- Timeliness: Freshness of data
+```
+
+**Template Reference:** See `knowledge/data-catalog.md` for catalog structure
+
+## Workflow Sequence
+
+```
+1. data (Data Requirements) → Apply 5W2H to discover all entities
+   ↓
+2. erd (ERD) → Document relationships with 5W2H analysis
+   ↓
+3. db (Database Requirements) → Define constraints and indexes with HMW
+   ↓
+4. sql (Schema DDL) → SINGLE SOURCE OF TRUTH for schema
+   ↓
+5. dict (Data Dictionary) → SINGLE SOURCE OF TRUTH for dict.* and ev.*
+   ↓
+6. flow (Data Flow) → Document transformations with HMW optimization
+   ↓
+7. cat (Data Catalog) → Inventory and governance with 5W2H
+   ↓
+   ✅ DATA TRACK COMPLETE (ready for API and frontend to reference)
+```
+
+## Gate Validation
+
+### Data Track Completion Criteria
+
+Before API backend and frontend can reference data:
+
+- [ ] All entities discovered with 5W2H analysis
+- [ ] Relationships documented with cardinality and constraints
+- [ ] Database requirements include all indexes and constraints
+- [ ] DDL schema is complete (sql is authoritative source)
+- [ ] Data dictionary defines all dict.* fields (single source)
+- [ ] Data dictionary defines all ev.* events (single source)
+- [ ] Data flows documented for key user journeys
+- [ ] Data catalog lists all assets with owners and lineage
+- [ ] No field definitions outside data dictionary
+- [ ] No event definitions outside data dictionary
+
+## Output Format
+
+Generate each document in sequence, ensuring:
+
+1. **Entity IDs:** Clear entity names (User, Order, not user_table)
+2. **5W2H Evidence:** Show systematic analysis for entities, relationships, constraints
+3. **HMW Transformations:** Document optimization opportunities
+4. **Single Source:** sql has schema, dict has fields/events, nowhere else
+5. **Traceability:** Link entities to BRD objectives, PRD features
+6. **Quantification:** Data volumes, growth rates, retention policies
+
+## Quality Checks
+
+After generation, validate:
+
+- **Normalization:** Is data model in 3NF minimum?
+- **Performance:** Are indexes defined for common queries?
+- **Integrity:** Are all foreign keys and constraints present?
+- **Governance:** Are owners, stewards, and retention defined?
+- **Authority:** Are sql and dict the only places with schema/field/event definitions?
+- **Methodology:** 5W2H and HMW evidence visible in documents
+
+## Knowledge Base
+
+This skill references template files in `knowledge/` directory:
+
+- `drd.md` - Data requirements document
+- `erd.md` - Entity relationship diagram
+- `dbrd.md` - Database requirements
+- `database-schema.md` - Schema DDL (authoritative)
+- `data-dictionary.md` - Field and event definitions (authoritative)
+- `data-flow-diagram.md` - Data transformations
+- `data-catalog.md` - Data governance
+
+## Best Practices
+
+1. **Normalize First:** Start with 3NF, denormalize only with evidence
+2. **Index Strategically:** Index foreign keys always, other columns based on queries
+3. **Document WHY:** Future you won't remember why constraints exist
+4. **PII Awareness:** Tag PII fields, define retention and deletion policies
+5. **Event Schema:** Consistent event payload structure (id, timestamp, entity_id)
+6. **Single Source:** Never duplicate field/event definitions
+7. **5W2H Rigor:** Systematic analysis prevents missing requirements
+8. **HMW for Performance:** Transform constraints into creative solutions
+
+## Common Pitfalls to Avoid
+
+- ❌ Premature denormalization (optimize after measuring, not before)
+- ❌ Missing foreign key indexes (huge performance impact)
+- ❌ Vague field definitions (define format, validation, rules)
+- ❌ Defining dict.* outside data dictionary (breaks single source)
+- ❌ Defining ev.* outside data dictionary (causes inconsistency)
+- ❌ Schema in multiple places (sql is authoritative, others reference)
+- ❌ No retention policy (GDPR compliance requires defined retention)
+- ❌ Skipping 5W2H (leads to incomplete data model)
+
+## Next Steps After This Skill
+
+After data chain completes:
+
+1. **API Backend (be):** Reference dict.* fields and ev.* events from data dictionary
+2. **Frontend (fe):** Reference ev.* events for telemetry
+3. **Convergence:** Both backend and frontend depend on data chain outputs
+
+Data chain is one of three parallel workstreams in Deliver phase. Orchestrator ensures data completes before dependent work begins.
